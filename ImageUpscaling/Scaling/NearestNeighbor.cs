@@ -14,9 +14,11 @@ namespace ImageUpscaling.Scaling
             {
                 for(int x = 0; x < image.Width; ++x)
                 {
+                    int tempX = (int)(x * coef);
+                    int tempY = (int)(y * coef);
                     for(int i = 0; i < image.BytePerPixel; ++i)
                     {
-                        image[y, x, i] = sourceImage.GetScaleValue(x, y, i, coef);
+                        image[y, x, i] = sourceImage[tempY, tempX, i];
                     }
                 }
             }

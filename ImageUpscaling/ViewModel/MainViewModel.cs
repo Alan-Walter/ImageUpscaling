@@ -80,7 +80,7 @@ namespace ImageUpscaling.ViewModel
 
         private void ScaleImage()
         {
-            NearestNeighbor nearestNeighbor = new NearestNeighbor();
+            IScaling nearestNeighbor = new BilinearInterpolation();
             ScalableImages.Add(new ScalableImageViewModel(new ScalableImage()
             {
                 Name = $"Scale x{scale:f2} - " + selectedScalableImage.FullName,

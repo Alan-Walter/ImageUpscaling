@@ -49,22 +49,17 @@ namespace ImageUpscaling.Scaling
         {
             get
             {
+                if (x >= Width)
+                    x = Width - 1;
+                if (y >= Height)
+                    y = Height - 1;
+
                 return data[y * stride + x * BytePerPixel + index];
             }
             set
             {
                 data[y * stride + x * BytePerPixel + index] = value;
             }
-        }
-
-        public byte GetScaleValue(int x, int y, int index, double scale)
-        {
-            return this[(int)(y * scale), (int)(x * scale), index];
-        }
-
-        public void SetScaleValue(int x, int y, int index, double scale, byte value)
-        {
-            this[(int)(y * scale), (int)(x * scale), index] = value;
         }
 
         public BitmapSource ToBitmapSource()
