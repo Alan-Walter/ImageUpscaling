@@ -9,9 +9,9 @@ using ImageUpscaling.Helpers;
 
 namespace ImageUpscaling.Scaling
 {
-    class BilinearInterpolation : BaseScaling
+    class BilinearInterpolation : IScaling
     {
-        public override BitmapSource ScaleImage(BitmapSource source, double scale)
+        public BitmapSource ScaleImage(BitmapSource source, double scale)
         {
             throw new NotImplementedException();
         }

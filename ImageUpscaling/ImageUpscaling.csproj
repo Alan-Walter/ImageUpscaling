@@ -67,8 +67,8 @@
     <Compile Include="Command.cs" />
     <Compile Include="Extensions\BitmapImageExtension.cs" />
     <Compile Include="Helpers\BitmapHelper.cs" />
+    <Compile Include="Scaling\ByteImage.cs" />
     <Compile Include="Model\ScalableImage.cs" />
-    <Compile Include="Scaling\BaseScaling.cs" />
     <Compile Include="Scaling\BilinearInterpolation.cs" />
     <Compile Include="Scaling\IScaling.cs" />
     <Compile Include="Scaling\NearestNeighbor.cs" />
