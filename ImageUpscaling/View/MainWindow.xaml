@@ -27,7 +27,11 @@
                    ContentStringFormat="Масштаб: {0:f2}"/>
             <Slider Value="{Binding Scale}" 
                     Minimum="1"
-                    Margin="5"/>
+                    Margin="5" 
+                    LargeChange="0.1"
+                    SmallChange="0.01" 
+                    IsSnapToTickEnabled="True"
+                    TickFrequency="0.01"/>
             <Button Command="{Binding ScaleCommand}" 
                     Content="Масштабировать"
                     Margin="5"/>

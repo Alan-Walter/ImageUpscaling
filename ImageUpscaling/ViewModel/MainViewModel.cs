@@ -8,6 +8,7 @@ using Microsoft.Win32;
 using System.Windows.Media.Imaging;
 using ImageUpscaling.Scaling;
 using ImageUpscaling.Scaling.Interpolation;
+using ImageUpscaling.Managers;
 
 namespace ImageUpscaling.ViewModel
 {
@@ -121,24 +122,20 @@ namespace ImageUpscaling.ViewModel
                 ScalableImages.Add(new ScalableImageViewModel(new ScalableImage()
                 {
                     Name = Path.GetFileName(filePath),
-                    Image = new BitmapImage(new Uri(filePath)),
-                }, true));
+                    Image = ImageFileManager.Instance.Load(filePath),
+                }));
                 SelectedScalableImage = ScalableImages.Last();
             }
         }
 
         private void ScaleImage()
         {
-            if (selectedScalableImage == null) return;  //  добавить окно
-
-
-            //IScaling nearestNeighbor = new BilinearInterpolation();
-            //ScalableImages.Add(new ScalableImageViewModel(new ScalableImage()
-            //{
-            //    Name = $"Scale x{scale:f2} - " + selectedScalableImage.FullName,
-            //    Image = nearestNeighbor.ScaleImage(selectedScalableImage.Image, scale)
-            //}));
-            //SelectedScalableImage = ScalableImages.Last();
+            if (selectedScalableImage == null) return;  //  добавить окно с ошибкой
+            if (scalingViewModel == null) return;
+            var result = scalingViewModel.Scaling.ScaleImage(selectedScalableImage.Image, scale);
+            string path = Path.GetFullPath($"./output/[{scalingViewModel.ToString()} x{scale} ]" + selectedScalableImage.Name);
+            ImageFileManager.Instance.Save(result, path);
+            System.Diagnostics.Process.Start("explorer.exe", string.Format("/select,\"{0}\"", path));
         }
     }
 }

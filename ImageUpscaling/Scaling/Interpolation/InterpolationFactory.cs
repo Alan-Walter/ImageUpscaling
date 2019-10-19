@@ -7,7 +7,7 @@ namespace ImageUpscaling.Scaling.Interpolation
     {
         public ICollection<IInterpolationScaling> GetScaleObjects()
         {
-            return InstanceFactory.GetInstance<IInterpolationScaling>();
+            return ReflectionHelper.GetInstance<IInterpolationScaling>();
         }
     }
 }
