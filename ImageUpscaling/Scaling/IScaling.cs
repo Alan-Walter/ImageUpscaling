@@ -1,14 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 
 namespace ImageUpscaling.Scaling
 {
-    interface IScaling
+    /// <summary>
+    /// Интерфейс для масштабирования изображения
+    /// </summary>
+    public interface IScaling
     {
+        /// <summary>
+        /// Название метода
+        /// </summary>
+        string Title { get; }
+
+        /// <summary>
+        /// Масштабировать изображение
+        /// </summary>
+        /// <param name="source">Исходное изображение</param>
+        /// <param name="scale">Масштаб</param>
+        /// <returns></returns>
         BitmapSource ScaleImage(BitmapSource source, double scale);
     }
 }

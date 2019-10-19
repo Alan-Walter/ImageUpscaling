@@ -8,7 +8,6 @@ namespace ImageUpscaling.ViewModel
     internal class ScalableImageViewModel : BaseViewModel
     {
         private readonly ScalableImage scalableImage;
-        private bool isSaved;
 
         public string Name
         {
@@ -16,7 +15,7 @@ namespace ImageUpscaling.ViewModel
             {
                 if (scalableImage.Name.Length < 30)
                     return scalableImage.Name;
-                return Path.GetFileName(scalableImage.Name).Substring(0, 30) + ".. " + Path.GetExtension(scalableImage.Name) + (isSaved ? "" : " *");
+                return Path.GetFileName(scalableImage.Name).Substring(0, 30) + ".. " + Path.GetExtension(scalableImage.Name);
             }
         }
 
@@ -24,22 +23,13 @@ namespace ImageUpscaling.ViewModel
 
         public BitmapSource Image => scalableImage.Image;
 
-        public bool IsSaved
-        {
-            get => isSaved;
-            set
-            {
-                if (isSaved == value) return;
-                isSaved = true;
-                RaisePropertyChanged();
-                RaisePropertyChanged("Name");
-            }
-        }
+        public int Width => scalableImage.Image.PixelWidth;
 
-        public ScalableImageViewModel(ScalableImage scalableImage, bool isSaved = false)
+        public int Height => scalableImage.Image.PixelHeight;
+
+        public ScalableImageViewModel(ScalableImage scalableImage)
         {
             this.scalableImage = scalableImage;
-            IsSaved = isSaved;
         }
     }
 }

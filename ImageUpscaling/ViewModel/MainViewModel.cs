@@ -7,6 +7,8 @@ using ImageUpscaling.Model;
 using Microsoft.Win32;
 using System.Windows.Media.Imaging;
 using ImageUpscaling.Scaling;
+using ImageUpscaling.Scaling.Interpolation;
+using ImageUpscaling.Managers;
 
 namespace ImageUpscaling.ViewModel
 {
@@ -15,7 +17,9 @@ namespace ImageUpscaling.ViewModel
         ScalableImageViewModel selectedScalableImage;
 
         ObservableCollection<ScalableImageViewModel> scalableImages;
+        ObservableCollection<ScalingViewModel> scalingViewModels;
         private double scale = 1;
+        private ScalingViewModel scalingViewModel;
 
         public Command OpenFileCommand { get; }
         public Command ScaleCommand { get; }
@@ -26,6 +30,19 @@ namespace ImageUpscaling.ViewModel
             set
             {
                 selectedScalableImage = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged("Size");
+                RaisePropertyChanged("ScaleSize");
+            }
+        }
+
+        public ScalingViewModel SelectedScalingAlgorithm 
+        { 
+            get => scalingViewModel;
+            set
+            {
+                if (scalingViewModel == value) return;
+                scalingViewModel = value;
                 RaisePropertyChanged();
             }
         }
@@ -40,6 +57,16 @@ namespace ImageUpscaling.ViewModel
             }
         }
 
+        public ObservableCollection<ScalingViewModel> ScalingAlgorithms
+        {
+            get => scalingViewModels;
+            set
+            {
+                scalingViewModels = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public double Scale
         {
             get => scale;
@@ -48,12 +75,35 @@ namespace ImageUpscaling.ViewModel
                 if (scale == value) return;
                 scale = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged("ScaleSize");
+            }
+        }
+
+        public string Size
+        {
+            get
+            {
+                if (selectedScalableImage == null) return null;
+                return $"{selectedScalableImage.Width}x{selectedScalableImage.Height}";
+            }
+        }
+
+        public string ScaleSize
+        {
+            get
+            {
+                if (selectedScalableImage == null) return null;
+                return $"{(int)Math.Round(selectedScalableImage.Width * scale)}x{(int)Math.Round(selectedScalableImage.Height * scale)}";
             }
         }
 
         public MainViewModel()
         {
             ScalableImages = new ObservableCollection<ScalableImageViewModel>();
+
+            InterpolationFactory interpolationFactory = new InterpolationFactory();
+            ScalingAlgorithms = new ObservableCollection<ScalingViewModel>(interpolationFactory.GetScaleObjects().Select(i => new ScalingViewModel(i)));
+            SelectedScalingAlgorithm = ScalingAlgorithms.FirstOrDefault();
 
             OpenFileCommand = new Command(OpenFile);
             ScaleCommand = new Command(ScaleImage);
@@ -72,21 +122,20 @@ namespace ImageUpscaling.ViewModel
                 ScalableImages.Add(new ScalableImageViewModel(new ScalableImage()
                 {
                     Name = Path.GetFileName(filePath),
-                    Image = new BitmapImage(new Uri(filePath)),
-                }, true));
+                    Image = ImageFileManager.Instance.Load(filePath),
+                }));
                 SelectedScalableImage = ScalableImages.Last();
             }
         }
 
         private void ScaleImage()
         {
-            IScaling nearestNeighbor = new BilinearInterpolation();
-            ScalableImages.Add(new ScalableImageViewModel(new ScalableImage()
-            {
-                Name = $"Scale x{scale:f2} - " + selectedScalableImage.FullName,
-                Image = nearestNeighbor.ScaleImage(selectedScalableImage.Image, scale)
-            }));
-            SelectedScalableImage = ScalableImages.Last();
+            if (selectedScalableImage == null) return;  //  добавить окно с ошибкой
+            if (scalingViewModel == null) return;
+            var result = scalingViewModel.Scaling.ScaleImage(selectedScalableImage.Image, scale);
+            string path = Path.GetFullPath($"./output/[{scalingViewModel.ToString()} x{scale} ]" + selectedScalableImage.Name);
+            ImageFileManager.Instance.Save(result, path);
+            System.Diagnostics.Process.Start("explorer.exe", string.Format("/select,\"{0}\"", path));
         }
     }
 }

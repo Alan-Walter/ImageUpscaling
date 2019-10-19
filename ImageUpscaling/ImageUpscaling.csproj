@@ -67,14 +67,20 @@
     <Compile Include="Command.cs" />
     <Compile Include="Extensions\BitmapImageExtension.cs" />
     <Compile Include="Helpers\BitmapHelper.cs" />
+    <Compile Include="Helpers\ReflectionHelper.cs" />
+    <Compile Include="Managers\ImageFileManager.cs" />
     <Compile Include="Scaling\ByteImage.cs" />
     <Compile Include="Model\ScalableImage.cs" />
-    <Compile Include="Scaling\BilinearInterpolation.cs" />
+    <Compile Include="Scaling\Interpolation\BilinearInterpolation.cs" />
+    <Compile Include="Scaling\Interpolation\IInterpolationScaling.cs" />
+    <Compile Include="Scaling\Interpolation\InterpolationFactory.cs" />
     <Compile Include="Scaling\IScaling.cs" />
-    <Compile Include="Scaling\NearestNeighbor.cs" />
+    <Compile Include="Scaling\IScalingFactory.cs" />
+    <Compile Include="Scaling\Interpolation\NearestNeighbor.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ScalableImageViewModel.cs" />
+    <Compile Include="ViewModel\ScalingViewModel.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

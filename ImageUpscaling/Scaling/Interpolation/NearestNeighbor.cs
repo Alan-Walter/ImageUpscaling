@@ -1,9 +1,11 @@
 ﻿using System.Windows.Media.Imaging;
 
-namespace ImageUpscaling.Scaling
+namespace ImageUpscaling.Scaling.Interpolation
 {
-    class NearestNeighbor : IScaling
+    class NearestNeighbor : IInterpolationScaling
     {
+        public string Title => "Ближайший сосед";
+
         public BitmapSource ScaleImage(BitmapSource source, double scale)
         {
             ByteImage sourceImage = ByteImage.FromBitmapSource(source);
