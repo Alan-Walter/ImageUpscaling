@@ -24,6 +24,10 @@ namespace ImageUpscaling.ViewModel
 
         public BitmapSource Image => scalableImage.Image;
 
+        public int Width => scalableImage.Image.PixelWidth;
+
+        public int Height => scalableImage.Image.PixelHeight;
+
         public bool IsSaved
         {
             get => isSaved;

@@ -7,10 +7,12 @@ using System.Windows.Media.Imaging;
 using ImageUpscaling.Extensions;
 using ImageUpscaling.Helpers;
 
-namespace ImageUpscaling.Scaling
+namespace ImageUpscaling.Scaling.Interpolation
 {
-    class BilinearInterpolation : IScaling
+    class BilinearInterpolation : IInterpolationScaling
     {
+        public string Title => "Билинейная интерполяция";
+
         public BitmapSource ScaleImage(BitmapSource source, double scale)
         {
             ByteImage sourceImage = ByteImage.FromBitmapSource(source);

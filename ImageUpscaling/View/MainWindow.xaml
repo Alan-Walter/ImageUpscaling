@@ -12,25 +12,34 @@
             <MenuItem Header="Файл">
                 <MenuItem Header="Открыть" 
                           Command="{Binding OpenFileCommand}"/>
-                <MenuItem Header="Сохранить"/>
-                <MenuItem Header="Сохранить как"/>
             </MenuItem>
             <MenuItem Header="Настройки"/>
         </Menu>
         <StackPanel
             Margin="5"
-            DockPanel.Dock="Left">
+            DockPanel.Dock="Left"
+            Width="200px">
+            <Label Content="Алгоритм:"/>
+            <ComboBox ItemsSource="{Binding ScalingAlgorithms}"
+                      Margin="5"
+                      SelectedItem="{Binding SelectedScalingAlgorithm}"/>
             <Label Content="{Binding Scale}" 
                    ContentStringFormat="Масштаб: {0:f2}"/>
             <Slider Value="{Binding Scale}" 
-                    Minimum="1"/>
+                    Minimum="1"
+                    Margin="5"/>
             <Button Command="{Binding ScaleCommand}" 
                     Content="Масштабировать"
                     Margin="5"/>
+            <Label Content="{Binding Size}"
+                   ContentStringFormat="Разрешение: {0}"/>
+            <Label Content="{Binding ScaleSize}"
+                   ContentStringFormat="Масштабирование: {0}"/>
         </StackPanel>
         <TabControl
             ItemsSource="{Binding ScalableImages}"
-            SelectedItem="{Binding SelectedScalableImage}">
+            SelectedItem="{Binding SelectedScalableImage}"
+            Margin="10">
             <TabControl.ItemTemplate>
                 <!-- this is the header template-->
                 <DataTemplate>
