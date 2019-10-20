@@ -133,7 +133,7 @@ namespace ImageUpscaling.ViewModel
             if (selectedScalableImage == null) return;  //  добавить окно с ошибкой
             if (scalingViewModel == null) return;
             var result = scalingViewModel.Scaling.ScaleImage(selectedScalableImage.Image, scale);
-            string path = Path.GetFullPath($"./output/[{scalingViewModel.ToString()} x{scale} ]" + selectedScalableImage.Name);
+            string path = Path.GetFullPath($"./output/[{scalingViewModel.ToString()} x{scale}] " + selectedScalableImage.Name);
             ImageFileManager.Instance.Save(result, path);
             System.Diagnostics.Process.Start("explorer.exe", string.Format("/select,\"{0}\"", path));
         }
