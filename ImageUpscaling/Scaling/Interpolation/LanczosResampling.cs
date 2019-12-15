@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using ImageUpscaling.Helpers;
 
 namespace ImageUpscaling.Scaling.Interpolation
 {
@@ -29,9 +30,21 @@ namespace ImageUpscaling.Scaling.Interpolation
                     double xDiff = x * coef - tempX;
                     double yDiff = y * coef - tempY;
 
-                    for (int i = 0; i < image.BytePerPixel; ++i)
+                    for (int b = 0; b < image.BytePerPixel; ++b)
                     {
-                        image[y, x, i] = 
+                        double temp = 0;
+                        double w = 0;
+                        for (int i = -a + 1; i < a; ++i)
+                        {
+                            for (int j = -a + 1; j < a; ++j)
+                            {
+                                double wTemp = LanczosKernel(i + xDiff) * LanczosKernel(j + yDiff);
+                                temp += sourceImage[tempY + j, tempX + i, b] * wTemp;
+                                w += wTemp;
+                            }
+                        }
+
+                        image[y, x, b] = MathHelper.Clamp(temp / w);
                     }
                 }
             }
@@ -41,22 +54,9 @@ namespace ImageUpscaling.Scaling.Interpolation
 
         private static double LanczosKernel(double x)
         {
-            if (x == 0)
-            {
-                return 1;
-            } else if (-a <= x && x < a)
-            {
-                return (a * Math.Sin(Math.PI * x) * Math.Sin(Math.PI * x / a)) / (Math.PI * Math.PI * x * x);
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        private static double TwoDimensionalLanczos(double x, double y)
-        {
-            return LanczosKernel(x) * LanczosKernel(y);
+            if (Math.Abs(x) <= a)
+                return MathHelper.Sinc(x) * MathHelper.Sinc(x / a);
+            return 0;
         }
     }
 }
