@@ -67,6 +67,7 @@
     <Compile Include="Command.cs" />
     <Compile Include="Extensions\BitmapImageExtension.cs" />
     <Compile Include="Helpers\BitmapHelper.cs" />
+    <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Managers\ImageFileManager.cs" />
     <Compile Include="Scaling\ByteImage.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Scaling\Interpolation\BilinearInterpolation.cs" />
     <Compile Include="Scaling\Interpolation\IInterpolationScaling.cs" />
     <Compile Include="Scaling\Interpolation\InterpolationFactory.cs" />
+    <Compile Include="Scaling\Interpolation\LanczosResampling.cs" />
     <Compile Include="Scaling\IScaling.cs" />
     <Compile Include="Scaling\IScalingFactory.cs" />
     <Compile Include="Scaling\Interpolation\NearestNeighbor.cs" />
