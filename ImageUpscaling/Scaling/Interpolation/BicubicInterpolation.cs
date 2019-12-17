@@ -8,7 +8,7 @@ using ImageUpscaling.Helpers;
 
 namespace ImageUpscaling.Scaling.Interpolation
 {
-    class BicubicInterpolation : IInterpolationScaling
+    class BicubicInterpolation : IScaling
     {
         public string Title => "Бикубическая интерполяция";
 

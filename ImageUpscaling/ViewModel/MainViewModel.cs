@@ -101,7 +101,7 @@ namespace ImageUpscaling.ViewModel
         {
             ScalableImages = new ObservableCollection<ScalableImageViewModel>();
 
-            InterpolationFactory interpolationFactory = new InterpolationFactory();
+            ImageScalingFactory interpolationFactory = new ImageScalingFactory();
             ScalingAlgorithms = new ObservableCollection<ScalingViewModel>(interpolationFactory.GetScaleObjects().Select(i => new ScalingViewModel(i)));
             SelectedScalingAlgorithm = ScalingAlgorithms.FirstOrDefault();
 

@@ -12,7 +12,7 @@ namespace ImageUpscaling.Helpers
         public static ICollection<T> GetInstance<T>()
         {
             var type = typeof(T);
-            var types = GetImplimentationTypes(type);
+            var types = GetImplimentationTypes(type).Where(i => !i.IsAbstract && !i.IsInterface);
             return types.Select(i => (T)Activator.CreateInstance(i)).ToList();
         }
 

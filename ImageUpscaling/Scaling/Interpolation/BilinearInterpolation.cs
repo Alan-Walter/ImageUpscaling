@@ -9,7 +9,7 @@ using ImageUpscaling.Helpers;
 
 namespace ImageUpscaling.Scaling.Interpolation
 {
-    class BilinearInterpolation : IInterpolationScaling
+    class BilinearInterpolation : IScaling
     {
         public string Title => "Билинейная интерполяция";
 

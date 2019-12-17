@@ -74,12 +74,11 @@
     <Compile Include="Model\ScalableImage.cs" />
     <Compile Include="Scaling\Interpolation\BicubicInterpolation.cs" />
     <Compile Include="Scaling\Interpolation\BilinearInterpolation.cs" />
-    <Compile Include="Scaling\Interpolation\IInterpolationScaling.cs" />
-    <Compile Include="Scaling\Interpolation\InterpolationFactory.cs" />
     <Compile Include="Scaling\Interpolation\LanczosResampling.cs" />
     <Compile Include="Scaling\IScaling.cs" />
     <Compile Include="Scaling\IScalingFactory.cs" />
     <Compile Include="Scaling\Interpolation\NearestNeighbor.cs" />
+    <Compile Include="Scaling\ImageScalingFactory.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ScalableImageViewModel.cs" />

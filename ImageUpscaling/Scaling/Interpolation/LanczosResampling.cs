@@ -8,11 +8,11 @@ using ImageUpscaling.Helpers;
 
 namespace ImageUpscaling.Scaling.Interpolation
 {
-    class LanczosResampling : IInterpolationScaling
+    class LanczosResampling : IScaling
     {
-        const int a = 3;
+        int A { get; } = 3;
 
-        public string Title => "Фильтр Ланцоша";
+        public string Title => $"Фильтр Ланцоша {A}";
 
         public BitmapSource ScaleImage(BitmapSource source, double scale)
         {
@@ -34,9 +34,9 @@ namespace ImageUpscaling.Scaling.Interpolation
                     {
                         double temp = 0;
                         double w = 0;
-                        for (int i = -a + 1; i < a; ++i)
+                        for (int i = -A + 1; i < A; ++i)
                         {
-                            for (int j = -a + 1; j < a; ++j)
+                            for (int j = -A + 1; j < A; ++j)
                             {
                                 double wTemp = LanczosKernel(i + xDiff) * LanczosKernel(j + yDiff);
                                 temp += sourceImage[tempY + j, tempX + i, b] * wTemp;
@@ -52,10 +52,10 @@ namespace ImageUpscaling.Scaling.Interpolation
             return image.ToBitmapSource();
         }
 
-        private static double LanczosKernel(double x)
+        private double LanczosKernel(double x)
         {
-            if (Math.Abs(x) <= a)
-                return MathHelper.Sinc(x) * MathHelper.Sinc(x / a);
+            if (Math.Abs(x) <= A)
+                return MathHelper.Sinc(x) * MathHelper.Sinc(x / A);
             return 0;
         }
     }
