@@ -14,6 +14,8 @@ namespace ImageUpscaling.Scaling.Interpolation
 
         public string Title => $"Фильтр Ланцоша {A}";
 
+        public bool IsScalable { get; } = true;
+
         public BitmapSource ScaleImage(BitmapSource source, double scale)
         {
             ByteImage sourceImage = ByteImage.FromBitmapSource(source);

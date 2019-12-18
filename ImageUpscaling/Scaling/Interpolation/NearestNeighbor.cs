@@ -6,6 +6,8 @@ namespace ImageUpscaling.Scaling.Interpolation
     {
         public string Title => "Ближайший сосед";
 
+        public bool IsScalable { get; } = true;
+
         public BitmapSource ScaleImage(BitmapSource source, double scale)
         {
             ByteImage sourceImage = ByteImage.FromBitmapSource(source);
