@@ -8,9 +8,12 @@ using ImageUpscaling.Helpers;
 
 namespace ImageUpscaling.Scaling.Interpolation
 {
-    class LanczosResampling : IScaling
+    /// <summary>
+    /// Масштабирование Ланцоша
+    /// </summary>
+    abstract class LanczosResampling : IScaling
     {
-        int A { get; } = 3;
+        protected abstract int A { get; }
 
         public string Title => $"Фильтр Ланцоша {A}";
 
@@ -20,33 +23,38 @@ namespace ImageUpscaling.Scaling.Interpolation
         {
             ByteImage sourceImage = ByteImage.FromBitmapSource(source);
             ByteImage image = new ByteImage(sourceImage, scale);
-            double coef = 1 / scale;
+            double coef = (double)(sourceImage.Width) / image.Width;
 
-            for (int y = 0; y < image.Height; ++y)
+            for (int x = 0; x < image.Width; ++x)
             {
-                for (int x = 0; x < image.Width; ++x)
+                for (int y = 0; y < image.Height; ++y)
                 {
-                    int tempX = (int)(x * coef);
-                    int tempY = (int)(y * coef);
+                    double sX = x * coef - 0.5d;
+                    double sY = y * coef - 0.5d;
+                    int tempX = (int)Math.Floor(sX);
+                    int tempY = (int)Math.Floor(sY);
 
-                    double xDiff = x * coef - tempX;
-                    double yDiff = y * coef - tempY;
+                    double[] channelData = new double[sourceImage.BytePerPixel];
+                    double weight = 0;
 
-                    for (int b = 0; b < image.BytePerPixel; ++b)
+                    for (int fY = tempY - A + 1; fY <= tempY + A; ++fY)
                     {
-                        double temp = 0;
-                        double w = 0;
-                        for (int i = -A + 1; i < A; ++i)
+                        if (fY < 0 || fY >= sourceImage.Height) continue;
+                        for (int fX = tempX - A + 1; fX <= tempX + A; ++fX)
                         {
-                            for (int j = -A + 1; j < A; ++j)
+                            if (fX < 0 || fX >= sourceImage.Width) continue;
+
+                            double wTemp = LanczosKernel(sX - fX) * LanczosKernel(sY - fY);
+                            weight += wTemp;
+                            for (int b = 0; b < sourceImage.BytePerPixel; ++b)
                             {
-                                double wTemp = LanczosKernel(i + xDiff) * LanczosKernel(j + yDiff);
-                                temp += sourceImage[tempY + j, tempX + i, b] * wTemp;
-                                w += wTemp;
+                                channelData[b] += sourceImage[fY, fX, b] * wTemp;
                             }
                         }
-
-                        image[y, x, b] = MathHelper.Clamp(temp / w);
+                    }
+                    for (int b = 0; b < sourceImage.BytePerPixel; ++b)
+                    {
+                        image[y, x, b] = MathHelper.Clamp(channelData[b] / weight);
                     }
                 }
             }
@@ -56,8 +64,8 @@ namespace ImageUpscaling.Scaling.Interpolation
 
         private double LanczosKernel(double x)
         {
-            if (Math.Abs(x) <= A)
-                return MathHelper.Sinc(x) * MathHelper.Sinc(x / A);
+            if (Math.Abs(x) < A)
+                return MathHelper.Sinc(x) * MathHelper.Sinc(x / (double)A);
             return 0;
         }
     }

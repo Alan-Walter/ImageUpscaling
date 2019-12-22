@@ -7,10 +7,19 @@ using ImageUpscaling.Scaling;
 
 namespace ImageUpscaling.ViewModel
 {
+    /// <summary>
+    /// ViewModel для алгоритма масштабирования
+    /// </summary>
     public class ScalingViewModel
     {
+        /// <summary>
+        /// Объект алгоритма масштабирования
+        /// </summary>
         public IScaling Scaling { get; }
 
+        /// <summary>
+        /// Масштабирумость алгоритма
+        /// </summary>
         public bool IsScalable => Scaling.IsScalable;
 
         public ScalingViewModel(IScaling scaling)

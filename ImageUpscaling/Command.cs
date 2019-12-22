@@ -7,6 +7,9 @@ using System.Windows.Input;
 
 namespace ImageUpscaling
 {
+    /// <summary>
+    /// Класс команды для MVVM
+    /// </summary>
     class Command : ICommand
     {
         readonly Func<object, bool> _canExecute;

@@ -74,12 +74,14 @@
     <Compile Include="Model\ScalableImage.cs" />
     <Compile Include="Scaling\Interpolation\BicubicInterpolation.cs" />
     <Compile Include="Scaling\Interpolation\BilinearInterpolation.cs" />
+    <Compile Include="Scaling\Interpolation\Lanczos2.cs" />
+    <Compile Include="Scaling\Interpolation\Lanczos3.cs" />
+    <Compile Include="Scaling\Interpolation\Lanczos4.cs" />
     <Compile Include="Scaling\Interpolation\LanczosResampling.cs" />
     <Compile Include="Scaling\IScaling.cs" />
     <Compile Include="Scaling\IScalingFactory.cs" />
     <Compile Include="Scaling\Interpolation\NearestNeighbor.cs" />
     <Compile Include="Scaling\ImageScalingFactory.cs" />
-    <Compile Include="Scaling\PixelInfo.cs" />
     <Compile Include="Scaling\PixelScaling\Scale2x.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -108,6 +110,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="ClassDiagram.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

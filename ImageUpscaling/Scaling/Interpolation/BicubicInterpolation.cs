@@ -8,6 +8,9 @@ using ImageUpscaling.Helpers;
 
 namespace ImageUpscaling.Scaling.Interpolation
 {
+    /// <summary>
+    /// Бикубическая интерполяция
+    /// </summary>
     class BicubicInterpolation : IScaling
     {
         public string Title => "Бикубическая интерполяция";
@@ -18,17 +21,19 @@ namespace ImageUpscaling.Scaling.Interpolation
         {
             ByteImage sourceImage = ByteImage.FromBitmapSource(source);
             ByteImage image = new ByteImage(sourceImage, scale);
-            double coef = 1 / scale;
+            double coef = (double)(sourceImage.Width) / image.Width;
 
             for (int y = 0; y < image.Height; ++y)
             {
                 for (int x = 0; x < image.Width; ++x)
                 {
-                    int tempX = (int)(x * coef);
-                    int tempY = (int)(y * coef);
+                    double sX = x * coef - 0.5d;
+                    double sY = y * coef - 0.5d;
+                    int tempX = (int)Math.Floor(sX);
+                    int tempY = (int)Math.Floor(sY);
 
-                    double xDiff = x * coef - tempX;
-                    double yDiff = y * coef - tempY;
+                    double xDiff = sX - Math.Floor(sX);
+                    double yDiff = sY - Math.Floor(sY);
 
                     for (int i = 0; i < image.BytePerPixel; ++i)
                     {
@@ -62,11 +67,20 @@ namespace ImageUpscaling.Scaling.Interpolation
             return image.ToBitmapSource();
         }
 
+        /// <summary>
+        /// Функция интерполяции
+        /// </summary>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <param name="C"></param>
+        /// <param name="D"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
         static double Interpolate(double A, double B, double C, double D, double t)
         {
-            double a = -A / 2.0f + (3.0f * B) / 2.0f - (3.0f * C) / 2.0f + D / 2.0f;
-            double b = A - (5.0f * B) / 2.0f + 2.0f * C - D / 2.0f;
-            double c = -A / 2.0f + C / 2.0f;
+            double a = -A / 2.0d + (3.0d * B) / 2.0d - (3.0d * C) / 2.0d + D / 2.0d;
+            double b = A - (5.0d * B) / 2.0d + 2.0d * C - D / 2.0d;
+            double c = -A / 2.0d + C / 2.0d;
             double d = B;
 
             return a * t * t * t + b * t * t + c * t + d;

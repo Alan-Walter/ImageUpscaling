@@ -9,8 +9,16 @@ using ImageUpscaling.Helpers;
 
 namespace ImageUpscaling.Extensions
 {
+    /// <summary>
+    /// Расширение для класса BitmapSource
+    /// </summary>
     static class BitmapImageExtension
     {
+        /// <summary>
+        /// Получение буффера байтов
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
         public static byte[] GetBuffer(this BitmapSource bitmap)
         {
             int stride = BitmapHelper.GetStride(bitmap.PixelWidth, bitmap.Format.BitsPerPixel);
