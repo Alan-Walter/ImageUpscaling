@@ -11,6 +11,8 @@ namespace ImageUpscaling.ViewModel
     {
         public IScaling Scaling { get; }
 
+        public bool IsScalable => Scaling.IsScalable;
+
         public ScalingViewModel(IScaling scaling)
         {
             Scaling = scaling;

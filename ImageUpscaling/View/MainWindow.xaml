@@ -31,14 +31,15 @@
                     LargeChange="0.1"
                     SmallChange="0.01" 
                     IsSnapToTickEnabled="True"
-                    TickFrequency="0.01"/>
+                    TickFrequency="0.01"
+                    IsEnabled="{Binding SelectedScalingAlgorithm.IsScalable}"/>
             <Button Command="{Binding ScaleCommand}" 
                     Content="Масштабировать"
                     Margin="5"/>
             <Label Content="{Binding Size}"
                    ContentStringFormat="Разрешение: {0}"/>
-            <Label Content="{Binding ScaleSize}"
-                   ContentStringFormat="Масштабирование: {0}"/>
+            <Label Content="{Binding Time}"/>
+            
         </StackPanel>
         <TabControl
             ItemsSource="{Binding ScalableImages}"
