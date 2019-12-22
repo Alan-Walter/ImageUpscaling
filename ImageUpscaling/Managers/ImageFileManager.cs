@@ -9,10 +9,16 @@ using ImageUpscaling.Helpers;
 
 namespace ImageUpscaling.Managers
 {
+    /// <summary>
+    /// Файловый менеджер изображений
+    /// </summary>
     class ImageFileManager
     {
         static ImageFileManager instance;
 
+        /// <summary>
+        /// Синглтон
+        /// </summary>
         public static ImageFileManager Instance
         {
             get
@@ -23,11 +29,21 @@ namespace ImageUpscaling.Managers
             }
         }
 
+        /// <summary>
+        /// Загрузка изображения из пути
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public BitmapSource Load(string path)
         {
             return new BitmapImage(new Uri(path));
         }
 
+        /// <summary>
+        /// Сохранение изображения в файл по указанному пути
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="filePath"></param>
         public void Save(BitmapSource image, string filePath)
         {
             var extension = string.Concat(Path.GetExtension(filePath).Skip(1));

@@ -38,6 +38,8 @@
                     Margin="5"/>
             <Label Content="{Binding Size}"
                    ContentStringFormat="Разрешение: {0}"/>
+            <Label Content="{Binding ScaleSize}"
+                   ContentStringFormat="Масштабирование: {0}"/>
             <Label Content="{Binding Time}"/>
             
         </StackPanel>

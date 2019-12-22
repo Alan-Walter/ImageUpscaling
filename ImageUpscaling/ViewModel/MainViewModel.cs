@@ -13,6 +13,9 @@ using System.Diagnostics;
 
 namespace ImageUpscaling.ViewModel
 {
+    /// <summary>
+    /// Класс главной ViewModel
+    /// </summary>
     class MainViewModel : BaseViewModel
     {
         ScalableImageViewModel selectedScalableImage;
@@ -23,9 +26,18 @@ namespace ImageUpscaling.ViewModel
         private ScalingViewModel scalingViewModel;
         private TimeSpan? workTime;
 
+        /// <summary>
+        /// Команда открытия файла
+        /// </summary>
         public Command OpenFileCommand { get; }
+        /// <summary>
+        /// Команда масштабирования изображения
+        /// </summary>
         public Command ScaleCommand { get; }
 
+        /// <summary>
+        /// Изображение для масштабирования
+        /// </summary>
         public ScalableImageViewModel SelectedScalableImage
         {
             get => selectedScalableImage;
@@ -38,6 +50,9 @@ namespace ImageUpscaling.ViewModel
             }
         }
 
+        /// <summary>
+        /// Алгоритм масштабирования
+        /// </summary>
         public ScalingViewModel SelectedScalingAlgorithm 
         { 
             get => scalingViewModel;
@@ -49,6 +64,9 @@ namespace ImageUpscaling.ViewModel
             }
         }
 
+        /// <summary>
+        /// Открытые изображения для масштабирования
+        /// </summary>
         public ObservableCollection<ScalableImageViewModel> ScalableImages
         {
             get => scalableImages;
@@ -59,6 +77,9 @@ namespace ImageUpscaling.ViewModel
             }
         }
 
+        /// <summary>
+        /// Алгоритмы масштабирования
+        /// </summary>
         public ObservableCollection<ScalingViewModel> ScalingAlgorithms
         {
             get => scalingViewModels;
@@ -69,6 +90,9 @@ namespace ImageUpscaling.ViewModel
             }
         }
 
+        /// <summary>
+        /// Масштаб
+        /// </summary>
         public double Scale
         {
             get => scale;
@@ -81,6 +105,9 @@ namespace ImageUpscaling.ViewModel
             }
         }
 
+        /// <summary>
+        /// Размер
+        /// </summary>
         public string Size
         {
             get
@@ -90,6 +117,9 @@ namespace ImageUpscaling.ViewModel
             }
         }
 
+        /// <summary>
+        /// Размер с масштабом
+        /// </summary>
         public string ScaleSize
         {
             get
@@ -99,6 +129,9 @@ namespace ImageUpscaling.ViewModel
             }
         }
 
+        /// <summary>
+        /// Время работы
+        /// </summary>
         public string Time
         {
             get
@@ -114,6 +147,9 @@ namespace ImageUpscaling.ViewModel
             }
         }
 
+        /// <summary>
+        /// Время работы
+        /// </summary>
         private TimeSpan? WorkTime
         {
             get
@@ -128,6 +164,9 @@ namespace ImageUpscaling.ViewModel
             }
         }
 
+        /// <summary>
+        /// Конструктор
+        /// </summary>
         public MainViewModel()
         {
             ScalableImages = new ObservableCollection<ScalableImageViewModel>();
@@ -140,6 +179,9 @@ namespace ImageUpscaling.ViewModel
             ScaleCommand = new Command(ScaleImage);
         }
 
+        /// <summary>
+        /// Открытие файла изображения
+        /// </summary>
         private void OpenFile()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -159,6 +201,9 @@ namespace ImageUpscaling.ViewModel
             }
         }
 
+        /// <summary>
+        /// Масштабировать изображение
+        /// </summary>
         private void ScaleImage()
         {
             if (selectedScalableImage == null) return;

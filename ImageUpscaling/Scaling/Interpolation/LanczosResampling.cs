@@ -8,6 +8,9 @@ using ImageUpscaling.Helpers;
 
 namespace ImageUpscaling.Scaling.Interpolation
 {
+    /// <summary>
+    /// Масштабирование Ланцоша
+    /// </summary>
     class LanczosResampling : IScaling
     {
         int A { get; } = 3;

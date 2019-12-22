@@ -5,10 +5,16 @@ using ImageUpscaling.Model;
 
 namespace ImageUpscaling.ViewModel
 {
+    /// <summary>
+    /// ViewModel для масштабируемого изображения
+    /// </summary>
     internal class ScalableImageViewModel : BaseViewModel
     {
         private readonly ScalableImage scalableImage;
 
+        /// <summary>
+        /// Сокращённое имя файла
+        /// </summary>
         public string Name
         {
             get
@@ -19,14 +25,30 @@ namespace ImageUpscaling.ViewModel
             }
         }
 
+        /// <summary>
+        /// Полное имя файла
+        /// </summary>
         public string FullName => scalableImage.Name;
 
+        /// <summary>
+        /// Изображение
+        /// </summary>
         public BitmapSource Image => scalableImage.Image;
 
+        /// <summary>
+        /// Ширина
+        /// </summary>
         public int Width => scalableImage.Image.PixelWidth;
 
+        /// <summary>
+        /// Высота
+        /// </summary>
         public int Height => scalableImage.Image.PixelHeight;
 
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="scalableImage"></param>
         public ScalableImageViewModel(ScalableImage scalableImage)
         {
             this.scalableImage = scalableImage;

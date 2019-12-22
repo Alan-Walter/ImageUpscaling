@@ -7,15 +7,35 @@ using ImageUpscaling.Helpers;
 
 namespace ImageUpscaling.Scaling
 {
+    /// <summary>
+    /// Класс, представляющий изображение как массив байтов
+    /// </summary>
     class ByteImage
     {
         readonly byte[] data;
         PixelFormat pixelFormat;
         private readonly int stride;
 
+        /// <summary>
+        /// Ширина
+        /// </summary>
         public int Width { get; }
+        /// <summary>
+        /// Высота
+        /// </summary>
         public int Height { get; }
+        /// <summary>
+        /// Количество байт на пиксель
+        /// </summary>
         public int BytePerPixel { get; }
+
+        /// <summary>
+        /// Конструктор, принимающий массив байтов, размеры и формат пикселя
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="pixelFormat"></param>
         public ByteImage(byte[] data, int width, int height, PixelFormat pixelFormat)
         {
             this.data = data;
@@ -26,6 +46,11 @@ namespace ImageUpscaling.Scaling
             BytePerPixel = stride / Width;
         }
 
+        /// <summary>
+        /// Конструктор, принимающий исходное изображение в формате ByteImage и коэффициент масштабирования
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="scale"></param>
         public ByteImage(ByteImage source, double scale)
         {
             Width = (int)Math.Round(source.Width * scale);
@@ -36,6 +61,11 @@ namespace ImageUpscaling.Scaling
             data = new byte[Height * stride];
         }
 
+        /// <summary>
+        /// Получение ByteImage из BitmapSource
+        /// </summary>
+        /// <param name="bitmapSource"></param>
+        /// <returns></returns>
         public static ByteImage FromBitmapSource(BitmapSource bitmapSource)
         {
             return new ByteImage(
@@ -46,6 +76,13 @@ namespace ImageUpscaling.Scaling
             );
         }
 
+        /// <summary>
+        /// Получение значение пикселя
+        /// </summary>
+        /// <param name="y">Координата Y</param>
+        /// <param name="x">Координата X</param>
+        /// <param name="index">Номер канала</param>
+        /// <returns></returns>
         public byte this[int y, int x, int index]
         {
             get
@@ -68,6 +105,12 @@ namespace ImageUpscaling.Scaling
             }
         }
 
+        /// <summary>
+        /// Получение значения пикселя по двум его координатам
+        /// </summary>
+        /// <param name="y"></param>
+        /// <param name="x"></param>
+        /// <returns></returns>
         public PixelInfo this[int y, int x]
         {
             get
@@ -95,7 +138,10 @@ namespace ImageUpscaling.Scaling
             }
         }
 
-
+        /// <summary>
+        /// Преобразование ByteImage к BitmapSource
+        /// </summary>
+        /// <returns></returns>
         public BitmapSource ToBitmapSource()
         {
             return BitmapSource.Create(Width, Height, 96, 96, pixelFormat, null, data, stride);

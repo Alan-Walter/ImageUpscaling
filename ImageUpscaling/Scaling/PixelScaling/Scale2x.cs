@@ -7,6 +7,9 @@ using System.Windows.Media.Imaging;
 
 namespace ImageUpscaling.Scaling.PixelScaling
 {
+    /// <summary>
+    /// Scale2x
+    /// </summary>
     class Scale2x : IScaling
     {
         public string Title => "Scale 2x";

@@ -2,6 +2,9 @@
 
 namespace ImageUpscaling.Scaling.Interpolation
 {
+    /// <summary>
+    /// Метод ближайшего соседа
+    /// </summary>
     class NearestNeighbor : IScaling
     {
         public string Title => "Ближайший сосед";

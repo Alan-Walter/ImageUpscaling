@@ -6,14 +6,26 @@ using System.Threading.Tasks;
 
 namespace ImageUpscaling.Scaling
 {
+    /// <summary>
+    /// Структура с информацией о пикселе
+    /// </summary>
     struct PixelInfo : IEquatable<PixelInfo>
     {
         private byte[] source;
 
         int offset;
 
+        /// <summary>
+        /// Число байтов на пиксель
+        /// </summary>
         public int Bytes { get; private set; }
 
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="source">Исходный массив</param>
+        /// <param name="offset">Смещение</param>
+        /// <param name="bytes">Число байтов</param>
         public PixelInfo(byte[] source, int offset, int bytes)
         {
             this.source = source;
@@ -21,6 +33,11 @@ namespace ImageUpscaling.Scaling
             Bytes = bytes;
         }
 
+        /// <summary>
+        /// Получение байта по его номеру
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public byte this[int index]
         {
             get

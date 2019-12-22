@@ -6,6 +6,9 @@ using System.Runtime.CompilerServices;
 
 namespace ImageUpscaling.ViewModel
 {
+    /// <summary>
+    /// Базовый класс для ViewModel
+    /// </summary>
     class BaseViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };

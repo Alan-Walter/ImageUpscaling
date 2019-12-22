@@ -8,6 +8,9 @@ using ImageUpscaling.Helpers;
 
 namespace ImageUpscaling.Scaling.Interpolation
 {
+    /// <summary>
+    /// Бикубическая интерполяция
+    /// </summary>
     class BicubicInterpolation : IScaling
     {
         public string Title => "Бикубическая интерполяция";
@@ -62,6 +65,15 @@ namespace ImageUpscaling.Scaling.Interpolation
             return image.ToBitmapSource();
         }
 
+        /// <summary>
+        /// Функция интерполяции
+        /// </summary>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <param name="C"></param>
+        /// <param name="D"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
         static double Interpolate(double A, double B, double C, double D, double t)
         {
             double a = -A / 2.0f + (3.0f * B) / 2.0f - (3.0f * C) / 2.0f + D / 2.0f;
