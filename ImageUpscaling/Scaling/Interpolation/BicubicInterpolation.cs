@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using ImageUpscaling.Helpers;
 
 namespace ImageUpscaling.Scaling.Interpolation
 {
-    class BicubicInterpolation : IInterpolationScaling
+    class BicubicInterpolation : IScaling
     {
         public string Title => "Бикубическая интерполяция";
+
+        public bool IsScalable { get; } = true;
 
         public BitmapSource ScaleImage(BitmapSource source, double scale)
         {
@@ -51,7 +54,7 @@ namespace ImageUpscaling.Scaling.Interpolation
                             xDiff);
 
                         double value = Interpolate(first, second, third, fourth, yDiff);
-                        image[y, x, i] = Clamp(value);
+                        image[y, x, i] = MathHelper.Clamp(value);
                     }
                 }
             }
@@ -59,7 +62,7 @@ namespace ImageUpscaling.Scaling.Interpolation
             return image.ToBitmapSource();
         }
 
-        double Interpolate(double A, double B, double C, double D, double t)
+        static double Interpolate(double A, double B, double C, double D, double t)
         {
             double a = -A / 2.0f + (3.0f * B) / 2.0f - (3.0f * C) / 2.0f + D / 2.0f;
             double b = A - (5.0f * B) / 2.0f + 2.0f * C - D / 2.0f;
@@ -67,15 +70,6 @@ namespace ImageUpscaling.Scaling.Interpolation
             double d = B;
 
             return a * t * t * t + b * t * t + c * t + d;
-        }
-
-        static byte Clamp(double val)
-        {
-            if (val > 255)
-                val = 255;
-            else if (val < 0)
-                val = 0;
-            return (byte)val;
         }
     }
 }

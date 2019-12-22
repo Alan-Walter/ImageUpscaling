@@ -2,9 +2,11 @@
 
 namespace ImageUpscaling.Scaling.Interpolation
 {
-    class NearestNeighbor : IInterpolationScaling
+    class NearestNeighbor : IScaling
     {
         public string Title => "Ближайший сосед";
+
+        public bool IsScalable { get; } = true;
 
         public BitmapSource ScaleImage(BitmapSource source, double scale)
         {

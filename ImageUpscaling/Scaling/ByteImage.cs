@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ImageUpscaling.Extensions;
@@ -66,6 +67,34 @@ namespace ImageUpscaling.Scaling
                 data[y * stride + x * BytePerPixel + index] = value;
             }
         }
+
+        public PixelInfo this[int y, int x]
+        {
+            get
+            {
+                if (x >= Width)
+                    x = Width - 1;
+                else if (x < 0)
+                    x = 0;
+                if (y >= Height)
+                    y = Height - 1;
+                else if (y < 0)
+                    y = 0;
+
+                return new PixelInfo(data, y * stride + x * BytePerPixel, BytePerPixel);
+            }
+            set
+            {
+                if (value.Bytes != BytePerPixel)
+                    throw new ArgumentException();
+
+                for (int i = 0; i < BytePerPixel; ++i)
+                {
+                    data[y * stride + x * BytePerPixel + i] = value[i];
+                }
+            }
+        }
+
 
         public BitmapSource ToBitmapSource()
         {

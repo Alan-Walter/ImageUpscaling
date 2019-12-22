@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using ImageUpscaling.Extensions;
 using ImageUpscaling.Helpers;
 
 namespace ImageUpscaling.Scaling.Interpolation
 {
-    class BilinearInterpolation : IScaling
+    class LanczosResampling : IScaling
     {
-        public string Title => "Билинейная интерполяция";
+        int A { get; } = 3;
+
+        public string Title => $"Фильтр Ланцоша {A}";
 
         public bool IsScalable { get; } = true;
 
@@ -31,24 +32,33 @@ namespace ImageUpscaling.Scaling.Interpolation
                     double xDiff = x * coef - tempX;
                     double yDiff = y * coef - tempY;
 
-                    for (int i = 0; i < image.BytePerPixel; ++i)
+                    for (int b = 0; b < image.BytePerPixel; ++b)
                     {
-                        byte a = sourceImage[tempY, tempX, i];
-                        byte b = sourceImage[tempY, tempX + 1, i];
-                        byte c = sourceImage[tempY + 1, tempX, i];
-                        byte d = sourceImage[tempY + 1, tempX + 1, i];
+                        double temp = 0;
+                        double w = 0;
+                        for (int i = -A + 1; i < A; ++i)
+                        {
+                            for (int j = -A + 1; j < A; ++j)
+                            {
+                                double wTemp = LanczosKernel(i + xDiff) * LanczosKernel(j + yDiff);
+                                temp += sourceImage[tempY + j, tempX + i, b] * wTemp;
+                                w += wTemp;
+                            }
+                        }
 
-                        byte val = (byte)(a * (1 - yDiff) * (1 - xDiff)
-                            + b * (1 - yDiff) * xDiff
-                            + c * yDiff * (1 - xDiff)
-                            + d * yDiff * xDiff);
-
-                        image[y, x, i] = val;
+                        image[y, x, b] = MathHelper.Clamp(temp / w);
                     }
                 }
             }
 
             return image.ToBitmapSource();
+        }
+
+        private double LanczosKernel(double x)
+        {
+            if (Math.Abs(x) <= A)
+                return MathHelper.Sinc(x) * MathHelper.Sinc(x / A);
+            return 0;
         }
     }
 }

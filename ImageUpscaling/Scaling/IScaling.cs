@@ -13,6 +13,11 @@ namespace ImageUpscaling.Scaling
         string Title { get; }
 
         /// <summary>
+        /// Масштабируемость
+        /// </summary>
+        bool IsScalable { get; }
+
+        /// <summary>
         /// Масштабировать изображение
         /// </summary>
         /// <param name="source">Исходное изображение</param>
