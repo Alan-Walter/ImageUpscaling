@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using ImageUpscaling.Scaling;
 using ImageUpscaling.Scaling.Interpolation;
 using ImageUpscaling.Managers;
+using System.Diagnostics;
 
 namespace ImageUpscaling.ViewModel
 {
@@ -20,6 +21,7 @@ namespace ImageUpscaling.ViewModel
         ObservableCollection<ScalingViewModel> scalingViewModels;
         private double scale = 1;
         private ScalingViewModel scalingViewModel;
+        private TimeSpan? workTime;
 
         public Command OpenFileCommand { get; }
         public Command ScaleCommand { get; }
@@ -97,6 +99,35 @@ namespace ImageUpscaling.ViewModel
             }
         }
 
+        public string Time
+        {
+            get
+            {
+                if (!workTime.HasValue)
+                {
+                    return string.Empty;
+                }
+                else
+                {
+                    return $"Время: {workTime.Value}";
+                }
+            }
+        }
+
+        private TimeSpan? WorkTime
+        {
+            get
+            {
+                return workTime;
+            }
+            set
+            {
+                if (workTime == value) return;
+                workTime = value;
+                RaisePropertyChanged("Time");
+            }
+        }
+
         public MainViewModel()
         {
             ScalableImages = new ObservableCollection<ScalableImageViewModel>();
@@ -130,9 +161,14 @@ namespace ImageUpscaling.ViewModel
 
         private void ScaleImage()
         {
-            if (selectedScalableImage == null) return;  //  добавить окно с ошибкой
+            if (selectedScalableImage == null) return;
             if (scalingViewModel == null) return;
+            WorkTime = null;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             var result = scalingViewModel.Scaling.ScaleImage(selectedScalableImage.Image, scale);
+            stopwatch.Stop();
+            WorkTime = stopwatch.Elapsed;
             string path = Path.GetFullPath($"./output/[{scalingViewModel.ToString()} x{scale}] {DateTime.Now.ToString().Replace(':', '.')} " + selectedScalableImage.Name);
             ImageFileManager.Instance.Save(result, path);
             System.Diagnostics.Process.Start("explorer.exe", string.Format("/select,\"{0}\"", path));
