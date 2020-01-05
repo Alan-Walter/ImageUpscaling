@@ -39,9 +39,9 @@ namespace ImageUpscaling.Scaling.Interpolation
                     {
                         double temp = 0;
                         double w = 0;
-                        for (int i = -A + 1; i < A; ++i)
+                        for (int i = -A + 1; i <= A; ++i)
                         {
-                            for (int j = -A + 1; j < A; ++j)
+                            for (int j = -A + 1; j <= A; ++j)
                             {
                                 double wTemp = LanczosKernel(i + xDiff) * LanczosKernel(j + yDiff);
                                 temp += sourceImage[tempY + j, tempX + i, b] * wTemp;
