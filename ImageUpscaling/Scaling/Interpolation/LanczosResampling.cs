@@ -39,10 +39,12 @@ namespace ImageUpscaling.Scaling.Interpolation
                     {
                         double temp = 0;
                         double w = 0;
-                        for (int i = -A + 1; i <= A; ++i)
+                        for (int j = -A + 1; j <= A; ++j)
                         {
-                            for (int j = -A + 1; j <= A; ++j)
+                            if (tempY + j < 0 || tempY + j >= sourceImage.Height) continue;
+                            for (int i = -A + 1; i <= A; ++i)
                             {
+                                if (tempX + i < 0 || tempX + i >= sourceImage.Width) continue;
                                 double wTemp = LanczosKernel(i + xDiff) * LanczosKernel(j + yDiff);
                                 temp += sourceImage[tempY + j, tempX + i, b] * wTemp;
                                 w += wTemp;
@@ -59,8 +61,8 @@ namespace ImageUpscaling.Scaling.Interpolation
 
         private double LanczosKernel(double x)
         {
-            if (Math.Abs(x) <= A)
-                return MathHelper.Sinc(x) * MathHelper.Sinc(x / A);
+            if (Math.Abs(x) < A)
+                return MathHelper.Sinc(x) * MathHelper.Sinc(x / (double)A);
             return 0;
         }
     }

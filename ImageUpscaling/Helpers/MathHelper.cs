@@ -18,13 +18,11 @@ namespace ImageUpscaling.Helpers
         /// <returns></returns>
         public static byte Clamp(double val)
         {
-            if (double.IsNaN(val))
-                return 0;
-            if (val > 255)
-                val = 255;
-            else if (val < 0)
-                val = 0;
-            return (byte)val;
+            if (val > 255.0)
+                val = (byte)255;
+            else if (val < 0.0)
+                val = (byte)0;
+            return (byte)Math.Round(val);
         }
 
         /// <summary>
