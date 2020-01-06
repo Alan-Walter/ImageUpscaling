@@ -25,33 +25,34 @@ namespace ImageUpscaling.Scaling.Interpolation
             ByteImage image = new ByteImage(sourceImage, scale);
             double coef = 1 / scale;
 
-            for (int y = 0; y < image.Height; ++y)
+            for (int x = 0; x < image.Width; ++x)
             {
-                for (int x = 0; x < image.Width; ++x)
+                for (int y = 0; y < image.Height; ++y)
                 {
                     int tempX = (int)(x * coef);
                     int tempY = (int)(y * coef);
 
-                    double xDiff = x * coef - tempX;
-                    double yDiff = y * coef - tempY;
+                    double[] channelData = new double[sourceImage.BytePerPixel];
+                    double weight = 0;
 
-                    for (int b = 0; b < image.BytePerPixel; ++b)
+                    for (int fY = tempY - A + 1; fY <= tempY + A; ++fY)
                     {
-                        double temp = 0;
-                        double w = 0;
-                        for (int j = -A + 1; j <= A; ++j)
+                        if (fY < 0 || fY >= sourceImage.Height) continue;
+                        for (int fX = tempX - A + 1; fX <= tempX + A; ++fX)
                         {
-                            if (tempY + j < 0 || tempY + j >= sourceImage.Height) continue;
-                            for (int i = -A + 1; i <= A; ++i)
+                            if (fX < 0 || fX >= sourceImage.Width) continue;
+
+                            double wTemp = LanczosKernel(x * coef - fX) * LanczosKernel(y * coef - fY);
+                            weight += wTemp;
+                            for (int b = 0; b < sourceImage.BytePerPixel; b++)
                             {
-                                if (tempX + i < 0 || tempX + i >= sourceImage.Width) continue;
-                                double wTemp = LanczosKernel(i + xDiff) * LanczosKernel(j + yDiff);
-                                temp += sourceImage[tempY + j, tempX + i, b] * wTemp;
-                                w += wTemp;
+                                channelData[b] += sourceImage[fY, fX, b] * wTemp;
                             }
                         }
-
-                        image[y, x, b] = MathHelper.Clamp(temp / w);
+                    }
+                    for (int b = 0; b < sourceImage.BytePerPixel; b++)
+                    {
+                        image[y, x, b] = MathHelper.Clamp(channelData[b] / weight);
                     }
                 }
             }

@@ -22,7 +22,7 @@ namespace ImageUpscaling.Helpers
                 val = (byte)255;
             else if (val < 0.0)
                 val = (byte)0;
-            return (byte)Math.Round(val);
+            return (byte)val;
         }
 
         /// <summary>
