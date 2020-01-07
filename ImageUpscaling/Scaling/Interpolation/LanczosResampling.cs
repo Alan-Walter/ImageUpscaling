@@ -11,9 +11,9 @@ namespace ImageUpscaling.Scaling.Interpolation
     /// <summary>
     /// Масштабирование Ланцоша
     /// </summary>
-    class LanczosResampling : IScaling
+    abstract class LanczosResampling : IScaling
     {
-        int A { get; } = 3;
+        protected abstract int A { get; }
 
         public string Title => $"Фильтр Ланцоша {A}";
 
@@ -44,13 +44,13 @@ namespace ImageUpscaling.Scaling.Interpolation
 
                             double wTemp = LanczosKernel(x * coef - fX) * LanczosKernel(y * coef - fY);
                             weight += wTemp;
-                            for (int b = 0; b < sourceImage.BytePerPixel; b++)
+                            for (int b = 0; b < sourceImage.BytePerPixel; ++b)
                             {
                                 channelData[b] += sourceImage[fY, fX, b] * wTemp;
                             }
                         }
                     }
-                    for (int b = 0; b < sourceImage.BytePerPixel; b++)
+                    for (int b = 0; b < sourceImage.BytePerPixel; ++b)
                     {
                         image[y, x, b] = MathHelper.Clamp(channelData[b] / weight);
                     }

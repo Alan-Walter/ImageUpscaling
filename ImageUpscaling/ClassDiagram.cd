@@ -9,28 +9,28 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="ImageUpscaling.Extensions.BitmapImageExtension" Collapsed="true">
-    <Position X="8.75" Y="2" Width="2" />
+    <Position X="7.5" Y="3.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Extensions\BitmapImageExtension.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ImageUpscaling.Helpers.BitmapHelper" Collapsed="true">
-    <Position X="8.75" Y="2.75" Width="1.5" />
+    <Position X="7.5" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Helpers\BitmapHelper.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ImageUpscaling.Helpers.MathHelper" Collapsed="true">
-    <Position X="8.75" Y="1.25" Width="1.5" />
+    <Position X="7.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAABAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Helpers\MathHelper.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ImageUpscaling.Helpers.ReflectionHelper" Collapsed="true">
-    <Position X="8.75" Y="5" Width="1.5" />
+    <Position X="7.5" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAABAAAAAAEAAAAAAAAAAA=</HashCode>
       <FileName>Helpers\ReflectionHelper.cs</FileName>
@@ -44,21 +44,21 @@
     </TypeIdentifier>
   </Class>
   <Class Name="ImageUpscaling.Managers.ImageFileManager" Collapsed="true">
-    <Position X="8.75" Y="0.5" Width="1.75" />
+    <Position X="7.5" Y="1.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAgIAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAAA=</HashCode>
       <FileName>Managers\ImageFileManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ImageUpscaling.Scaling.ByteImage" Collapsed="true">
-    <Position X="8.75" Y="6.5" Width="1.5" />
+    <Position X="7.5" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAACBAAAAAAAKAAAAEAAIAAAAAAAAAEQAAAAABA=</HashCode>
       <FileName>Scaling\ByteImage.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ImageUpscaling.Scaling.ImageScalingFactory" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="8.75" Y="4.25" Width="1.75" />
+    <Position X="7.5" Y="5.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Scaling\ImageScalingFactory.cs</FileName>
@@ -82,7 +82,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="ImageUpscaling.Scaling.Interpolation.LanczosResampling" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="17" Y="5.5" Width="1.5" />
+    <Position X="17" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAEAAEBAAAAAAAAAAAAAAAEAAIAAAAAA=</HashCode>
       <FileName>Scaling\Interpolation\LanczosResampling.cs</FileName>
@@ -90,7 +90,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="ImageUpscaling.Scaling.Interpolation.NearestNeighbor" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="17" Y="6.25" Width="1.5" />
+    <Position X="17" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAEAAEBAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Scaling\Interpolation\NearestNeighbor.cs</FileName>
@@ -152,7 +152,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="ImageUpscaling.ViewModel.ScalingViewModel" Collapsed="true">
-    <Position X="17" Y="1.75" Width="1.75" />
+    <Position X="16.75" Y="1.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAEAAAAEABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>ViewModel\ScalingViewModel.cs</FileName>
@@ -161,14 +161,27 @@
       <Property Name="Scaling" />
     </ShowAsAssociation>
   </Class>
-  <Struct Name="ImageUpscaling.Scaling.PixelInfo" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="8.75" Y="5.75" Width="1.5" />
+  <Class Name="ImageUpscaling.Scaling.Interpolation.Lanczos2" Collapsed="true">
+    <Position X="14.5" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AACAAAAAAAAAAAIAiAAAAAAAAAAAAIAAAAAIAAAAAiA=</HashCode>
-      <FileName>Scaling\PixelInfo.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Scaling\Interpolation\Lanczos2.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Struct>
+  </Class>
+  <Class Name="ImageUpscaling.Scaling.Interpolation.Lanczos3" Collapsed="true">
+    <Position X="16.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Scaling\Interpolation\Lanczos3.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ImageUpscaling.Scaling.Interpolation.Lanczos4" Collapsed="true">
+    <Position X="18.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Scaling\Interpolation\Lanczos4.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Interface Name="ImageUpscaling.Scaling.IScaling" Collapsed="true">
     <Position X="17" Y="3" Width="1.5" />
     <TypeIdentifier>
@@ -177,7 +190,7 @@
     </TypeIdentifier>
   </Interface>
   <Interface Name="ImageUpscaling.Scaling.IScalingFactory&lt;T&gt;" Collapsed="true">
-    <Position X="8.75" Y="3.5" Width="1.75" />
+    <Position X="7.5" Y="4.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Scaling\IScalingFactory.cs</FileName>

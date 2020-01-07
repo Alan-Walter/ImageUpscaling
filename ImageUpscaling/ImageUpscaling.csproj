@@ -74,6 +74,9 @@
     <Compile Include="Model\ScalableImage.cs" />
     <Compile Include="Scaling\Interpolation\BicubicInterpolation.cs" />
     <Compile Include="Scaling\Interpolation\BilinearInterpolation.cs" />
+    <Compile Include="Scaling\Interpolation\Lanczos2.cs" />
+    <Compile Include="Scaling\Interpolation\Lanczos3.cs" />
+    <Compile Include="Scaling\Interpolation\Lanczos4.cs" />
     <Compile Include="Scaling\Interpolation\LanczosResampling.cs" />
     <Compile Include="Scaling\IScaling.cs" />
     <Compile Include="Scaling\IScalingFactory.cs" />
