@@ -45,7 +45,7 @@ namespace ImageScalingTester
             foreach (var scaling in imageScalingFactory.GetScaleObjects())
             {
                 var image = ImageFileManager.Instance.Load(textBox1.Text);
-                stopwatch.Start();
+                stopwatch.Restart();
                 var result = scaling.ScaleImage(image, scale);
                 stopwatch.Stop();
                 var workTime = stopwatch.Elapsed;
@@ -71,7 +71,7 @@ namespace ImageScalingTester
             ByteImage first = ByteImage.FromBitmapSource(i);
             ByteImage second = ByteImage.FromBitmapSource(k);
             double mse = MSE(first, second);
-            int max = 255 * 255;
+            double max = 65025;
 
             return 10 * Math.Log(max / mse, 10);
         }
@@ -82,7 +82,7 @@ namespace ImageScalingTester
                 || first.Width != second.Width
                 || first.Height != second.Height)
             {
-                new ArgumentException();
+                throw new ArgumentException();
             }
 
             long result = 0;
@@ -90,7 +90,7 @@ namespace ImageScalingTester
             {
                 for (int x = 0; x < first.Width; ++x)
                 {
-                    for (int b = 0; b < first.BytePerPixel - 1; ++b)
+                    for (int b = 0; b < first.BytePerPixel; ++b)
                     {
                         int f = Math.Abs(first[y, x, b] - second[y, x, b]);
                         result += f * f;
