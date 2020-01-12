@@ -10,11 +10,13 @@ namespace ImageUpscaling.Scaling
     /// <summary>
     /// Класс, представляющий изображение как массив байтов
     /// </summary>
-    class ByteImage
+    public class ByteImage
     {
+        readonly double dpiX, dpiY;
         readonly byte[] data;
         PixelFormat pixelFormat;
         private readonly int stride;
+        readonly BitmapPalette bitmapPalette;
 
         /// <summary>
         /// Ширина
@@ -36,7 +38,7 @@ namespace ImageUpscaling.Scaling
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="pixelFormat"></param>
-        public ByteImage(byte[] data, int width, int height, PixelFormat pixelFormat)
+        private ByteImage(byte[] data, int width, int height, PixelFormat pixelFormat, BitmapPalette bitmapPalette, double dpiX, double dpiY)
         {
             this.data = data;
             Width = width;
@@ -44,6 +46,9 @@ namespace ImageUpscaling.Scaling
             stride = BitmapHelper.GetStride(width, pixelFormat.BitsPerPixel);
             this.pixelFormat = pixelFormat;
             BytePerPixel = stride / Width;
+            this.bitmapPalette = bitmapPalette;
+            this.dpiX = dpiX;
+            this.dpiY = dpiY;
         }
 
         /// <summary>
@@ -59,6 +64,7 @@ namespace ImageUpscaling.Scaling
             pixelFormat = source.pixelFormat;
             BytePerPixel = stride / Width;
             data = new byte[Height * stride];
+            this.bitmapPalette = source.bitmapPalette;
         }
 
         /// <summary>
@@ -72,7 +78,10 @@ namespace ImageUpscaling.Scaling
                 bitmapSource.GetBuffer(),
                 bitmapSource.PixelWidth,
                 bitmapSource.PixelHeight,
-                bitmapSource.Format
+                bitmapSource.Format,
+                bitmapSource.Palette,
+                bitmapSource.DpiX,
+                bitmapSource.DpiY
             );
         }
 
@@ -144,7 +153,7 @@ namespace ImageUpscaling.Scaling
         /// <returns></returns>
         public BitmapSource ToBitmapSource()
         {
-            return BitmapSource.Create(Width, Height, 96, 96, pixelFormat, null, data, stride);
+            return BitmapSource.Create(Width, Height, dpiX, dpiY, pixelFormat, bitmapPalette, data, stride);
         }
     }
 }

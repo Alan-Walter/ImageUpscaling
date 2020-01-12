@@ -12,7 +12,7 @@ namespace ImageUpscaling.Managers
     /// <summary>
     /// Файловый менеджер изображений
     /// </summary>
-    class ImageFileManager
+    public class ImageFileManager
     {
         static ImageFileManager instance;
 

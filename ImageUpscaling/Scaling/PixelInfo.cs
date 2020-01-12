@@ -9,7 +9,7 @@ namespace ImageUpscaling.Scaling
     /// <summary>
     /// Структура с информацией о пикселе
     /// </summary>
-    struct PixelInfo : IEquatable<PixelInfo>
+    public struct PixelInfo : IEquatable<PixelInfo>
     {
         private byte[] source;
 
