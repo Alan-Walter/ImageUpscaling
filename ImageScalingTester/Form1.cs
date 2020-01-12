@@ -90,14 +90,14 @@ namespace ImageScalingTester
             {
                 for (int x = 0; x < first.Width; ++x)
                 {
-                    for (int b = 0; b < first.BytePerPixel; ++b)
+                    for (int b = 0; b < first.BytePerPixel - 1; ++b)
                     {
                         int f = Math.Abs(first[y, x, b] - second[y, x, b]);
                         result += f * f;
                     }
                 }
             }
-            return result / (double)(first.Width * first.Height * first.BytePerPixel);
+            return result / (double)(first.Width * first.Height * (first.BytePerPixel - 1));
         }
 
         private void button4_Click(object sender, EventArgs e)
