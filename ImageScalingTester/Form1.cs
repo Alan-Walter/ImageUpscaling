@@ -49,12 +49,12 @@ namespace ImageScalingTester
                 var result = scaling.ScaleImage(image, scale);
                 stopwatch.Stop();
                 var workTime = stopwatch.Elapsed;
-                string path = Path.GetFullPath($"./output/[{scaling.Title}] {Path.GetFileName(textBox1.Text)}");
+                string path = Path.GetFullPath($"./output/[{scaling.Title}] {Path.GetFileName(textBox2.Text)}");
                 ImageFileManager.Instance.Save(result, path);
                 double psnr = GetPSNR(ImageFileManager.Instance.Load(textBox2.Text), result);
                 stats.Add(scaling.Title, new KeyValuePair<TimeSpan, double>(workTime, psnr));
             }
-            File.WriteAllText($"./output/data_{Path.GetFileName(textBox1.Text)}.txt", string.Join("\n", stats.Select(i => $"{i.Key}\t{i.Value.Key}\t{i.Value.Value}")));
+            File.WriteAllText($"./output/data_{Path.GetFileName(textBox2.Text)}.txt", string.Join("\n", stats.Select(i => $"{i.Key}\t{i.Value.Key}\t{i.Value.Value}")));
         }
 
         private string GetPath()
@@ -73,7 +73,7 @@ namespace ImageScalingTester
             double mse = MSE(first, second);
             double max = 65025;
 
-            return 10 * Math.Log(max / mse, 10);
+            return 10 * Math.Log10(max / mse);
         }
 
         static double MSE(ByteImage first, ByteImage second)
@@ -98,6 +98,13 @@ namespace ImageScalingTester
                 }
             }
             return result / (double)(first.Width * first.Height * first.BytePerPixel);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var first = ImageFileManager.Instance.Load(textBox1.Text);
+            var second = ImageFileManager.Instance.Load(textBox2.Text);
+            label4.Text = GetPSNR(second, first).ToString();
         }
     }
 }
