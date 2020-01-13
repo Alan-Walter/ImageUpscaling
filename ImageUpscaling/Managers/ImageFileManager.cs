@@ -36,7 +36,15 @@ namespace ImageUpscaling.Managers
         /// <returns></returns>
         public BitmapSource Load(string path)
         {
-            return new BitmapImage(new Uri(path));
+            BitmapImage image = new BitmapImage();
+            using (Stream stream = File.Open(path, FileMode.Open))
+            {
+                image.BeginInit();
+                image.StreamSource = stream;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.EndInit();
+            }
+            return image;
         }
 
         /// <summary>
