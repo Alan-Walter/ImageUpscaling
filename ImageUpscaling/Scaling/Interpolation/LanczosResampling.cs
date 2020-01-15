@@ -23,7 +23,7 @@ namespace ImageUpscaling.Scaling.Interpolation
         {
             ByteImage sourceImage = ByteImage.FromBitmapSource(source);
             ByteImage image = new ByteImage(sourceImage, scale);
-            double coef = 1 / scale;
+            double coef = (double)(sourceImage.Width - 1) / image.Width;
 
             for (int x = 0; x < image.Width; ++x)
             {

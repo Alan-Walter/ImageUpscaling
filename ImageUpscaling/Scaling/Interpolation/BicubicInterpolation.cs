@@ -21,7 +21,7 @@ namespace ImageUpscaling.Scaling.Interpolation
         {
             ByteImage sourceImage = ByteImage.FromBitmapSource(source);
             ByteImage image = new ByteImage(sourceImage, scale);
-            double coef = 1 / scale;
+            double coef = (double)(sourceImage.Width - 1) / image.Width;
 
             for (int y = 0; y < image.Height; ++y)
             {
@@ -76,9 +76,9 @@ namespace ImageUpscaling.Scaling.Interpolation
         /// <returns></returns>
         static double Interpolate(double A, double B, double C, double D, double t)
         {
-            double a = -A / 2.0f + (3.0f * B) / 2.0f - (3.0f * C) / 2.0f + D / 2.0f;
-            double b = A - (5.0f * B) / 2.0f + 2.0f * C - D / 2.0f;
-            double c = -A / 2.0f + C / 2.0f;
+            double a = -A / 2.0d + (3.0d * B) / 2.0d - (3.0d * C) / 2.0d + D / 2.0d;
+            double b = A - (5.0d * B) / 2.0d + 2.0d * C - D / 2.0d;
+            double c = -A / 2.0d + C / 2.0d;
             double d = B;
 
             return a * t * t * t + b * t * t + c * t + d;
