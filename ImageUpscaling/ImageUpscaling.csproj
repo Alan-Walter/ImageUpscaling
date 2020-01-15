@@ -82,7 +82,6 @@
     <Compile Include="Scaling\IScalingFactory.cs" />
     <Compile Include="Scaling\Interpolation\NearestNeighbor.cs" />
     <Compile Include="Scaling\ImageScalingFactory.cs" />
-    <Compile Include="Scaling\PixelInfo.cs" />
     <Compile Include="Scaling\PixelScaling\Scale2x.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

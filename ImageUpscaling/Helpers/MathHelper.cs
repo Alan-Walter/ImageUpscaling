@@ -18,6 +18,7 @@ namespace ImageUpscaling.Helpers
         /// <returns></returns>
         public static byte Clamp(double val)
         {
+            val = Math.Round(val);
             if (val > 255.0)
                 val = (byte)255;
             else if (val < 0.0)

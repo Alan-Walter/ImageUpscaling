@@ -120,30 +120,22 @@ namespace ImageUpscaling.Scaling
         /// <param name="y"></param>
         /// <param name="x"></param>
         /// <returns></returns>
-        public PixelInfo this[int y, int x]
+        public double this[int y, int x]
         {
             get
             {
-                if (x >= Width)
-                    x = Width - 1;
-                else if (x < 0)
-                    x = 0;
-                if (y >= Height)
-                    y = Height - 1;
-                else if (y < 0)
-                    y = 0;
-
-                return new PixelInfo(data, y * stride + x * BytePerPixel, BytePerPixel);
+                var b = this[y, x, 0];
+                var g = this[y, x, 1];
+                var r = this[y, x, 2];
+                return (0.114f * b + 0.587f * g + 0.299f * r);
             }
             set
             {
-                if (value.Bytes != BytePerPixel)
-                    throw new ArgumentException();
-
-                for (int i = 0; i < BytePerPixel; ++i)
-                {
-                    data[y * stride + x * BytePerPixel + i] = value[i];
-                }
+                var val = MathHelper.Clamp(value);
+                this[y, x, 0] = val;
+                this[y, x, 1] = val;
+                this[y, x, 2] = val;
+                this[y, x, 3] = 255;
             }
         }
 
