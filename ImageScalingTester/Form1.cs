@@ -84,20 +84,21 @@ namespace ImageScalingTester
             {
                 throw new ArgumentException();
             }
+            int bytes = first.BytePerPixel == 4 ? 3 : first.BytePerPixel;
 
             long result = 0;
             for (int y = 0; y < first.Height; ++y)
             {
                 for (int x = 0; x < first.Width; ++x)
                 {
-                    for (int b = 0; b < first.BytePerPixel - 1; ++b)
+                    for (int b = 0; b < bytes; ++b)
                     {
                         int f = Math.Abs(first[y, x, b] - second[y, x, b]);
                         result += f * f;
                     }
                 }
             }
-            return result / (double)(first.Width * first.Height * (first.BytePerPixel - 1));
+            return result / (double)(first.Width * first.Height * (bytes));
         }
 
         private void button4_Click(object sender, EventArgs e)
