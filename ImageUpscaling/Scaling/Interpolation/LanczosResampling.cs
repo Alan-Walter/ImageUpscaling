@@ -23,14 +23,16 @@ namespace ImageUpscaling.Scaling.Interpolation
         {
             ByteImage sourceImage = ByteImage.FromBitmapSource(source);
             ByteImage image = new ByteImage(sourceImage, scale);
-            double coef = (double)(sourceImage.Width - 1) / image.Width;
+            double coef = (double)(sourceImage.Width) / image.Width;
 
             for (int x = 0; x < image.Width; ++x)
             {
                 for (int y = 0; y < image.Height; ++y)
                 {
-                    int tempX = (int)(x * coef);
-                    int tempY = (int)(y * coef);
+                    double sX = x * coef - 0.5d;
+                    double sY = y * coef - 0.5d;
+                    int tempX = (int)Math.Floor(sX);
+                    int tempY = (int)Math.Floor(sY);
 
                     double[] channelData = new double[sourceImage.BytePerPixel];
                     double weight = 0;
@@ -42,7 +44,7 @@ namespace ImageUpscaling.Scaling.Interpolation
                         {
                             if (fX < 0 || fX >= sourceImage.Width) continue;
 
-                            double wTemp = LanczosKernel(x * coef - fX) * LanczosKernel(y * coef - fY);
+                            double wTemp = LanczosKernel(sX - fX) * LanczosKernel(sY - fY);
                             weight += wTemp;
                             for (int b = 0; b < sourceImage.BytePerPixel; ++b)
                             {

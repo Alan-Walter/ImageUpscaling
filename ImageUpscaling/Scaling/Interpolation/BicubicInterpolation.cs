@@ -21,17 +21,19 @@ namespace ImageUpscaling.Scaling.Interpolation
         {
             ByteImage sourceImage = ByteImage.FromBitmapSource(source);
             ByteImage image = new ByteImage(sourceImage, scale);
-            double coef = (double)(sourceImage.Width - 1) / image.Width;
+            double coef = (double)(sourceImage.Width) / image.Width;
 
             for (int y = 0; y < image.Height; ++y)
             {
                 for (int x = 0; x < image.Width; ++x)
                 {
-                    int tempX = (int)(x * coef);
-                    int tempY = (int)(y * coef);
+                    double sX = x * coef - 0.5d;
+                    double sY = y * coef - 0.5d;
+                    int tempX = (int)Math.Floor(sX);
+                    int tempY = (int)Math.Floor(sY);
 
-                    double xDiff = x * coef - tempX;
-                    double yDiff = y * coef - tempY;
+                    double xDiff = sX - Math.Floor(sX);
+                    double yDiff = sY - Math.Floor(sY);
 
                     for (int i = 0; i < image.BytePerPixel; ++i)
                     {
