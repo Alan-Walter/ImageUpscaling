@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageUpscaling", "ImageUpscaling\ImageUpscaling.csproj", "{9C0A875D-3FFA-46C6-87D4-FFBA3D93DF37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageUpscaling.Desktop.Framework", "ImageUpscaling\ImageUpscaling.Desktop.Framework.csproj", "{9C0A875D-3FFA-46C6-87D4-FFBA3D93DF37}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageScaling", "ImageScaling\ImageScaling.csproj", "{EB9C1822-D8F2-418B-BA3E-DD665A09E833}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageUpscaling.Desktop.Core", "ImageUpscaling.Desktop.Core\ImageUpscaling.Desktop.Core.csproj", "{4D592256-B8DA-4026-88B8-16A57B2E88F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{9C0A875D-3FFA-46C6-87D4-FFBA3D93DF37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C0A875D-3FFA-46C6-87D4-FFBA3D93DF37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C0A875D-3FFA-46C6-87D4-FFBA3D93DF37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB9C1822-D8F2-418B-BA3E-DD665A09E833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB9C1822-D8F2-418B-BA3E-DD665A09E833}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB9C1822-D8F2-418B-BA3E-DD665A09E833}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB9C1822-D8F2-418B-BA3E-DD665A09E833}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D592256-B8DA-4026-88B8-16A57B2E88F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D592256-B8DA-4026-88B8-16A57B2E88F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D592256-B8DA-4026-88B8-16A57B2E88F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D592256-B8DA-4026-88B8-16A57B2E88F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
