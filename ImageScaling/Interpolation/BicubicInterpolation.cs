@@ -1,15 +1,15 @@
-﻿using System;
+﻿using ImageScaling.Helpers;
 
-using ImageScaling.Helpers;
+using System;
 
 namespace ImageScaling.Interpolation
 {
     /// <summary>
     /// Бикубическая интерполяция
     /// </summary>
-    public sealed class BicubicInterpolation : IScaling
+    public sealed class BicubicInterpolation : InterpolationAlgorithm
     {
-        public ByteImage ScaleImage(ByteImage source, double scale)
+        protected override ByteImage ScaleImage(ByteImage source, double scale)
         {
             ByteImage image = new ByteImage(source, scale);
             double coef = (double)(source.Width) / image.Width;

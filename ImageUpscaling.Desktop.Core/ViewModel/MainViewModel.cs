@@ -1,15 +1,23 @@
-﻿using System;
+﻿using ImageScaling;
+using ImageScaling.Helpers;
+using ImageScaling.KerasNet;
+using ImageScaling.NeuralNetworks;
+
+using ImageUpscaling.Desktop.Core.Models;
+using ImageUpscaling.Desktop.Core.Services;
+using ImageUpscaling.Desktop.Core.View;
+
+using Microsoft.Win32;
+
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-
-using ImageScaling;
-using ImageScaling.IO;
-
-using ImageUpscaling.Desktop.Core.Model;
-
-using Microsoft.Win32;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace ImageUpscaling.Desktop.Core.ViewModel
 {
@@ -18,75 +26,92 @@ namespace ImageUpscaling.Desktop.Core.ViewModel
     /// </summary>
     internal class MainViewModel : BaseViewModel
     {
-        private ScalableImageViewModel selectedScalableImage;
+        #region Приватные поля
 
-        private ObservableCollection<ScalableImageViewModel> scalableImages;
-        private ObservableCollection<ScalingViewModel> scalingViewModels;
+        private ObservableCollection<ImageFileViewModel> imageFileViewModels;
+        private ObservableCollection<ScaleImageViewModel> scaleImageViewModels;
+        private ObservableCollection<SRGANViewModel> srganViewModels;
+        private ScaleImageViewModel selectedScaleImageViewModel;
+        private SRGANViewModel selectedSRGANViewModel;
         private double scale = 1;
-        private ScalingViewModel scalingViewModel;
-        private TimeSpan? workTime;
+        private string errorMessage;
+        private bool canStarted = true;
+        private string userMessage = "Ожидание действий";
+        private readonly AppSettings settings;
+        private readonly ScalingFactory<IScaleImage> scalingFactory;
+
+        #endregion Приватные поля
+
+        #region Публичные свойства
 
         /// <summary>
-        /// Команда открытия файла
+        /// Коллекция ViewModel файлов изображений
         /// </summary>
-        public Command OpenFileCommand { get; }
-
-        /// <summary>
-        /// Команда масштабирования изображения
-        /// </summary>
-        public Command ScaleCommand { get; }
-
-        /// <summary>
-        /// Изображение для масштабирования
-        /// </summary>
-        public ScalableImageViewModel SelectedScalableImage
+        public ObservableCollection<ImageFileViewModel> ImageFileViewModels
         {
-            get => selectedScalableImage;
+            get => imageFileViewModels;
             set
             {
-                selectedScalableImage = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("Size");
-                RaisePropertyChanged("ScaleSize");
-            }
-        }
-
-        /// <summary>
-        /// Алгоритм масштабирования
-        /// </summary>
-        public ScalingViewModel SelectedScalingAlgorithm
-        {
-            get => scalingViewModel;
-            set
-            {
-                if (scalingViewModel == value) return;
-                scalingViewModel = value;
+                if (imageFileViewModels == value) return;
+                imageFileViewModels = value;
                 RaisePropertyChanged();
             }
         }
 
         /// <summary>
-        /// Открытые изображения для масштабирования
+        /// Коллекция ViewModel алгоритмов масштабирования
         /// </summary>
-        public ObservableCollection<ScalableImageViewModel> ScalableImages
+        public ObservableCollection<ScaleImageViewModel> ScaleImageViewModels
         {
-            get => scalableImages;
+            get => scaleImageViewModels;
             set
             {
-                scalableImages = value;
+                if (scaleImageViewModels == value) return;
+                scaleImageViewModels = value;
                 RaisePropertyChanged();
             }
         }
 
         /// <summary>
-        /// Алгоритмы масштабирования
+        /// Коллекция view model моделей SRGAN
         /// </summary>
-        public ObservableCollection<ScalingViewModel> ScalingAlgorithms
+        public ObservableCollection<SRGANViewModel> SRGANViewModels
         {
-            get => scalingViewModels;
+            get => srganViewModels;
             set
             {
-                scalingViewModels = value;
+                if (value == srganViewModels) return;
+                srganViewModels = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Выбранный алгоритм масштабирования изображения
+        /// </summary>
+        public ScaleImageViewModel SelectedScaleImageViewModel
+        {
+            get => selectedScaleImageViewModel;
+            set
+            {
+                if (selectedScaleImageViewModel == value) return;
+                selectedScaleImageViewModel = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged("IsScalable");
+                RaisePropertyChanged("IsSRGAN");
+            }
+        }
+
+        /// <summary>
+        /// Выбранная модель SRGAN
+        /// </summary>
+        public SRGANViewModel SelectedSRGANViewModel
+        {
+            get => selectedSRGANViewModel;
+            set
+            {
+                if (value == selectedSRGANViewModel) return;
+                selectedSRGANViewModel = value;
                 RaisePropertyChanged();
             }
         }
@@ -102,82 +127,146 @@ namespace ImageUpscaling.Desktop.Core.ViewModel
                 if (scale == value) return;
                 scale = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged("ScaleSize");
             }
         }
 
         /// <summary>
-        /// Размер
+        /// Масштабируемость алгоритма
         /// </summary>
-        public string Size
+        public Visibility IsScalable
         {
             get
             {
-                if (selectedScalableImage == null) return null;
-                return $"{selectedScalableImage.Width}x{selectedScalableImage.Height}";
+                return SelectedScaleImageViewModel?.IsScalable == true ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
         /// <summary>
-        /// Размер с масштабом
+        /// SRGAN алгоритм масштабирования
         /// </summary>
-        public string ScaleSize
+        public Visibility IsSRGAN
         {
             get
             {
-                if (selectedScalableImage == null) return null;
-                return $"{(int)Math.Round(selectedScalableImage.Width * scale)}x{(int)Math.Round(selectedScalableImage.Height * scale)}";
+                return SelectedScaleImageViewModel.ScaleImageType == typeof(SRGAN) ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
         /// <summary>
-        /// Время работы
+        /// Текст ошибки
         /// </summary>
-        public string Time
+        public string ErrorMessage
         {
-            get
-            {
-                if (!workTime.HasValue)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return $"Время: {workTime.Value}";
-                }
-            }
-        }
-
-        /// <summary>
-        /// Время работы
-        /// </summary>
-        private TimeSpan? WorkTime
-        {
-            get
-            {
-                return workTime;
-            }
+            get => errorMessage;
             set
             {
-                if (workTime == value) return;
-                workTime = value;
-                RaisePropertyChanged("Time");
+                if (errorMessage == value) return;
+                errorMessage = value;
+                RaisePropertyChanged();
             }
         }
 
         /// <summary>
-        /// Конструктор
+        /// Можно ли запустить
         /// </summary>
+        public bool CanStarted
+        {
+            get => canStarted;
+            set
+            {
+                if (canStarted == value) return;
+                canStarted = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Сообщение пользователю
+        /// </summary>
+        public string UserMessage
+        {
+            get => userMessage;
+            set
+            {
+                if (userMessage == value) return;
+                userMessage = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        #endregion Публичные свойства
+
+        #region Команды
+
+        /// <summary>
+        /// Удалить файл изображения
+        /// </summary>
+        public ICommand DeleteImageFileCommand { get; }
+
+        /// <summary>
+        /// Команда открытия файла
+        /// </summary>
+        public ICommand OpenFileCommand { get; }
+
+        /// <summary>
+        /// Команда масштабирования изображения
+        /// </summary>
+        public ICommand ScaleCommand { get; }
+
+        /// <summary>
+        /// Команда очистки списка
+        /// </summary>
+        public ICommand ClearCommand { get; }
+
+        /// <summary>
+        /// Команда настроек
+        /// </summary>
+        public ICommand SettingsCommand { get; }
+
+        #endregion Команды
+
         public MainViewModel()
         {
-            ScalableImages = new ObservableCollection<ScalableImageViewModel>();
+            scalingFactory = new ScalingFactory<IScaleImage>();
+            settings = ConfigService.GetAppSettings();
 
-            ImageScalingFactory interpolationFactory = new ImageScalingFactory();
-            ScalingAlgorithms = new ObservableCollection<ScalingViewModel>(interpolationFactory.GetScaleObjects().Select(i => new ScalingViewModel(i)));
-            SelectedScalingAlgorithm = ScalingAlgorithms.FirstOrDefault();
-
+            DeleteImageFileCommand = new Command((i) => DeleteImageFile(i));
             OpenFileCommand = new Command(OpenFile);
-            ScaleCommand = new Command(ScaleImage);
+            ScaleCommand = new Command(ScaleImage, () => CanStarted);
+            ClearCommand = new Command(i =>
+            {
+                ImageFileViewModels.Clear();
+            });
+            SettingsCommand = new Command(() =>
+            {
+                var window = new SettingsWindow(() =>
+                {
+                    ReloadSRGANModels();
+                });
+                window.ShowDialog();
+            });
+
+            ImageFileViewModels = new ObservableCollection<ImageFileViewModel>();
+            ScaleImageViewModels = new ObservableCollection<ScaleImageViewModel>(scalingFactory.GetImplTypes().Select(i =>
+            {
+                return new ScaleImageViewModel(i);
+            }));
+            ReloadSRGANModels();
+
+            SelectedScaleImageViewModel = ScaleImageViewModels.FirstOrDefault();
+            SelectedSRGANViewModel = SRGANViewModels.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Удалить файл изображения из view model
+        /// </summary>
+        /// <param name="imageFile">Объект View Model файла изображения</param>
+        private void DeleteImageFile(object imageFile)
+        {
+            if (imageFile is ImageFileViewModel imageFileViewModel)
+            {
+                ImageFileViewModels.Remove(imageFileViewModel);
+            }
         }
 
         /// <summary>
@@ -188,17 +277,21 @@ namespace ImageUpscaling.Desktop.Core.ViewModel
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Filter = "Image files|*.bmp;*.jpg;*.gif;*.png;*.tif|All files|*.*",
-                FilterIndex = 1
+                FilterIndex = 1,
+                Multiselect = true
             };
             if (openFileDialog.ShowDialog() == true)
             {
-                var filePath = openFileDialog.FileName;
-                ScalableImages.Add(new ScalableImageViewModel(new ScalableImage()
+                foreach (var filePath in openFileDialog.FileNames)
                 {
-                    Name = Path.GetFileName(filePath),
-                    ByteImage = ByteImageFileManager.ReadFile(filePath),
-                }));
-                SelectedScalableImage = ScalableImages.Last();
+                    var (width, height) = ImageHelper.GetResolution(filePath);
+                    ImageFileViewModels.Add(new ImageFileViewModel(this)
+                    {
+                        FileName = Path.GetFileName(filePath),
+                        FullPath = filePath,
+                        Size = $"{width} x {height}"
+                    });
+                }
             }
         }
 
@@ -207,17 +300,104 @@ namespace ImageUpscaling.Desktop.Core.ViewModel
         /// </summary>
         private void ScaleImage()
         {
-            if (selectedScalableImage == null) return;
-            if (scalingViewModel == null) return;
-            WorkTime = null;
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            var result = scalingViewModel.Scaling.ScaleImage(selectedScalableImage.Image, scale);
-            stopwatch.Stop();
-            WorkTime = stopwatch.Elapsed;
-            string path = Path.GetFullPath($"./output/[{scalingViewModel.ToString()} x{scale}] {DateTime.Now.ToString().Replace(':', '.')} " + selectedScalableImage.Name);
-            ByteImageFileManager.Save(result, path);
-            System.Diagnostics.Process.Start("explorer.exe", string.Format("/select,\"{0}\"", path));
+            if (SelectedScaleImageViewModel == null)
+            {
+                ErrorMessage = "Алгоритм масштабирования не выбран";
+                return;
+            }
+
+            if (!ImageFileViewModels.Any())
+            {
+                ErrorMessage = "Отсутствуют изображения для масштабирования";
+                return;
+            }
+
+            var scale = scalingFactory.GetScaleObject(SelectedScaleImageViewModel.ScaleImageType);
+            if (scale is IScalable scalable)
+            {
+                scalable.Scale = Scale;
+            }
+
+            if (scale is SRGAN srgan)
+            {
+                if (SelectedSRGANViewModel == null)
+                {
+                    ErrorMessage = "Не выбрана модель нейронной сети";
+                    return;
+                }
+
+                srgan.ModelPath = SelectedSRGANViewModel.ModelPath;
+
+                if (settings.UseCPU)
+                {
+                    KerasHelper.HideCuda();
+                }
+            }
+
+            if (!Directory.Exists(settings.OutputPath))
+            {
+                Directory.CreateDirectory(settings.OutputPath);
+            }
+
+            CanStarted = false;
+            UserMessage = "Выполнение масштабирования";
+
+            Dispatcher.CurrentDispatcher.BeginInvoke(() =>
+            {
+                var timer = new Stopwatch();
+                timer.Start();
+                try
+                {
+                    foreach (var image in ImageFileViewModels)
+                    {
+                        scale.ScaleImage(image.FullPath, settings.OutputPath);
+                    }
+
+                    timer.Stop();
+
+                    UserMessage = $"Масштабирование завершено\nВремя: {timer.Elapsed}";
+
+                    if (settings.OpenAfterScale)
+                    {
+                        Process.Start("explorer.exe", settings.OutputPath);
+                    }
+                }
+                catch (Exception e)
+                {
+                    UserMessage = "Произошла ошибка";
+                    ErrorMessage = "Текст ошибки: " + e.Message;
+                }
+                finally
+                {
+                    CanStarted = true;
+                }
+            }, DispatcherPriority.Background);
+        }
+
+        /// <summary>
+        /// Получить модели SRGAN
+        /// </summary>
+        /// <returns>Модели SRGAN</returns>
+        private IEnumerable<SRGANViewModel> GetSRGANModels()
+        {
+            var viewModels = new List<SRGANViewModel>();
+            foreach (var dir in settings.SRGANModelDirectories)
+            {
+                if (Directory.Exists(dir))
+                {
+                    var files = Directory.GetFiles(dir, ConfigService.FileExtPattern);
+                    viewModels.AddRange(files.Select(i => new SRGANViewModel(i)));
+                }
+            }
+            return viewModels;
+        }
+
+        /// <summary>
+        /// Перезагрузить модели SRGAN
+        /// </summary>
+        private void ReloadSRGANModels()
+        {
+            SRGANViewModels = new ObservableCollection<SRGANViewModel>(GetSRGANModels());
         }
     }
 }

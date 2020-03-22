@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
@@ -13,9 +14,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Keras.NET" Version="3.7.4.2" />
-    <PackageReference Include="Numpy.Bare" Version="3.7.1.14" />
-    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ImageScaling\ImageScaling.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="trainparams.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

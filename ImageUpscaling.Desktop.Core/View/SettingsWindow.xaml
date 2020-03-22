@@ -1,0 +1,76 @@
+﻿<Window x:Class="ImageUpscaling.Desktop.Core.View.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageUpscaling.Desktop.Core.View"
+        mc:Ignorable="d"
+        Title="Настройки" Height="450" Width="450" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" ResizeMode="NoResize">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30 px" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <GroupBox Header="SRGAN"
+                      Margin="5">
+                <CheckBox Content="Использовать CPU (при наличии GPU), требуется перезапуск"
+                          IsChecked="{Binding UseCPU}"
+                          Margin="5" />
+            </GroupBox>
+            <GroupBox Header="Путь для сохранения"
+                      Margin="5">
+                <StackPanel>
+                    <TextBox Text="{Binding OutputPath}"
+                             IsEnabled="False"
+                             Margin="5" />
+                    <Button Content="Указать путь"
+                            Margin="5"
+                            Command="{Binding OpenPathCommand}" />
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Операции после масштабирования"
+                      Margin="5">
+                <StackPanel Margin="5">
+                    <CheckBox Content="Открыть папку с файлами"
+                              IsChecked="{Binding OpenAfterScale}"
+                              Margin="5" />
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Директории с моделями для SRGAN"
+                      Margin="5">
+                <StackPanel Margin="5">
+                    <ListBox ItemsSource="{Binding SRGANModelDirectories}"
+                             Margin="5"
+                             HorizontalContentAlignment="Stretch"
+                             SelectedItem="{Binding SelectedSRGANDirectoryViewModel}"
+                             Height="75px">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Directory}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <WrapPanel>
+                        <Button Content="Добавить"
+                                Margin="5"
+                                Command="{Binding AddDirectoryCommand}" />
+                        <Button Content="Удалить"
+                                Margin="5"
+                                Command="{Binding DeleteDirectoryCommand}" />
+                    </WrapPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <WrapPanel Grid.Row="1"
+                   Orientation="Horizontal"
+                   HorizontalAlignment="Right">
+            <Button Content="Сохранить"
+                    Margin="5"
+                    Command="{Binding SaveCommand}" />
+            <Button Content="Отмена"
+                    Margin="5"
+                    Command="{Binding CancelCommand}" />
+        </WrapPanel>
+    </Grid>
+</Window>

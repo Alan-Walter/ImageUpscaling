@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using ImageUpscaling.Desktop.Core.ViewModel;
 
-using ImageUpscaling.Desktop.Core.ViewModel;
+using System.Windows;
 
 namespace ImageUpscaling.Desktop.Core.View
 {
@@ -9,13 +9,14 @@ namespace ImageUpscaling.Desktop.Core.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        readonly MainViewModel mainViewModel;
+        private readonly MainViewModel mainViewModel;
 
         public MainWindow()
         {
             InitializeComponent();
             mainViewModel = new MainViewModel();
             DataContext = mainViewModel;
+            Keras.Keras.DisablePySysConsoleLog = true;
         }
     }
 }

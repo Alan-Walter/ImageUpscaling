@@ -5,6 +5,6 @@
     /// </summary>
     public sealed class Lanczos4 : LanczosResampling
     {
-        protected override int A => 4;
+        protected override int KernelOrder => 4;
     }
 }

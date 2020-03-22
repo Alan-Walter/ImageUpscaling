@@ -36,12 +36,22 @@ namespace ImageScaling.Helpers
         /// <summary>
         /// Вычисление смещения
         /// </summary>
-        /// <param name="width"></param>
-        /// <param name="bitsPerPixel"></param>
-        /// <returns></returns>
-        public static int GetStride(int width, int bitsPerPixel)
+        /// <param name="width">Ширина изображения</param>
+        /// <param name="bytePerPixel">Количество байт на пиксель</param>
+        /// <returns>Смещение (длина в байтах)</returns>
+        public static int GetStride(int width, int bytePerPixel)
         {
-            return (width * bitsPerPixel + 31) / 32 * 4;
+            return (width * bytePerPixel) + ((width * bytePerPixel) % 4);
+        }
+
+        /// <summary>
+        /// Конвертировать в формат byte
+        /// </summary>
+        /// <param name="val">Значение от -1 до 1</param>
+        /// <returns>Значение в формате byte от 0 до 255</returns>
+        public static byte ConvertToByteFormat(double val)
+        {
+            return Clamp((val + 1) * 127.5);
         }
     }
 }

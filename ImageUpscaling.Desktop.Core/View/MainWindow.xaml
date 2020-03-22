@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageUpscaling.Desktop.Core.View"
         mc:Ignorable="d"
-        Title="Увеличение изображения" Height="450" Width="800">
+        Title="Увеличение изображений" Height="500" Width="800">
     <DockPanel>
         <Menu
             DockPanel.Dock="Top">
@@ -13,53 +13,96 @@
                 <MenuItem Header="Открыть"
                           Command="{Binding OpenFileCommand}" />
             </MenuItem>
-            <!--<MenuItem Header="Настройки" />-->
+            <MenuItem Header="Настройки"
+                      Command="{Binding SettingsCommand}" />
         </Menu>
         <StackPanel
             Margin="5"
             DockPanel.Dock="Left"
             Width="200px">
             <Label Content="Алгоритм:" />
-            <ComboBox ItemsSource="{Binding ScalingAlgorithms}"
+            <ComboBox ItemsSource="{Binding ScaleImageViewModels}"
                       Margin="5"
-                      SelectedItem="{Binding SelectedScalingAlgorithm}" />
-            <Label Content="{Binding Scale}"
-                   ContentStringFormat="Масштаб: {0:f2}" />
-            <Slider Value="{Binding Scale}"
-                    Minimum="1"
-                    Margin="5"
-                    LargeChange="0.1"
-                    SmallChange="0.01"
-                    IsSnapToTickEnabled="True"
-                    TickFrequency="0.01" />
+                      SelectedItem="{Binding SelectedScaleImageViewModel}" />
+            <StackPanel Visibility="{Binding IsScalable}">
+                <Label Content="{Binding Scale}"
+                       ContentStringFormat="Масштаб: {0:f2}" />
+                <Slider Value="{Binding Scale}"
+                        Minimum="1"
+                        Margin="5"
+                        LargeChange="0.1"
+                        SmallChange="0.1"
+                        IsSnapToTickEnabled="True"
+                        TickFrequency="0.1" />
+            </StackPanel>
+            <StackPanel Visibility="{Binding IsSRGAN}">
+                <Label Content="Модель:" />
+                <ComboBox ItemsSource="{Binding SRGANViewModels}"
+                          Margin="5"
+                          SelectedItem="{Binding SelectedSRGANViewModel}" />
+            </StackPanel>
             <Button Command="{Binding ScaleCommand}"
                     Content="Масштабировать"
-                    Margin="5" />
-            <Label Content="{Binding Size}"
-                   ContentStringFormat="Размер: {0}" />
-            <Label Content="{Binding ScaleSize}"
-                   ContentStringFormat="Масштабирование: {0}" />
-            <Label Content="{Binding Time}" />
+                    Margin="5"
+                    IsEnabled="{Binding CanStarted}" />
+            <TextBlock Text="{Binding UserMessage}"
+                       Margin="5"
+                       FontSize="14"
+                       TextWrapping="Wrap" />
+            <TextBlock FontSize="14"
+                       Margin="5"
+                       Text="{Binding ErrorMessage}"
+                       TextWrapping="Wrap"
+                       Foreground="Red" />
         </StackPanel>
-        <TabControl
-            ItemsSource="{Binding ScalableImages}"
-            SelectedItem="{Binding SelectedScalableImage}"
-            Margin="10">
-            <TabControl.ItemTemplate>
-                <!-- this is the header template-->
-                <DataTemplate>
-                    <TextBlock
-                    Text="{Binding Name}" />
-                </DataTemplate>
-            </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
-                <!-- this is the body of the TabItem template-->
-                <DataTemplate>
-                    <!--<TextBlock
-                    Text="{Binding Name}" />-->
-                    <Image Source="{Binding BitmapImage}" />
-                </DataTemplate>
-            </TabControl.ContentTemplate>
-        </TabControl>
+        <Grid IsEnabled="{Binding CanStarted}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="30px" />
+            </Grid.RowDefinitions>
+            <ListBox Margin="10"
+                     ItemsSource="{Binding ImageFileViewModels}"
+                     HorizontalContentAlignment="Stretch"
+                     Grid.Row="0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="250px" />
+                                <ColumnDefinition Width="100px" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="75px" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Margin="5"
+                                       Grid.Column="0"
+                                       FontSize="16"
+                                       Text="{Binding Path=FileName}"
+                                       HorizontalAlignment="Center"
+                                       TextTrimming="CharacterEllipsis" />
+                            <TextBlock Margin="5"
+                                       Grid.Column="1"
+                                       FontSize="16"
+                                       Text="{Binding Path=Size}"
+                                       HorizontalAlignment="Center" />
+                            <TextBlock Margin="5"
+                                       Grid.Column="2"
+                                       FontSize="16"
+                                       Text="{Binding Path=FullPath}"
+                                       HorizontalAlignment="Center"
+                                       TextTrimming="CharacterEllipsis" />
+                            <Button Margin="5"
+                                    Grid.Column="3"
+                                    Content="Удалить"
+                                    Command="{Binding MainViewModel.DeleteImageFileCommand}"
+                                    CommandParameter="{Binding}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button Grid.Row="1"
+                    Command="{Binding ClearCommand}"
+                    Content="Очистить список"
+                    Margin="5" />
+        </Grid>
     </DockPanel>
 </Window>

@@ -1,18 +1,18 @@
-﻿using System;
+﻿using ImageScaling.Helpers;
 
-using ImageScaling.Helpers;
+using System;
 
 namespace ImageScaling.Interpolation
 {
     /// <summary>
     /// Билинейная интерполяция
     /// </summary>
-    public sealed class BilinearInterpolation : IScaling
+    public sealed class BilinearInterpolation : InterpolationAlgorithm
     {
-        public ByteImage ScaleImage(ByteImage source, double scale)
+        protected override ByteImage ScaleImage(ByteImage source, double scale)
         {
             ByteImage image = new ByteImage(source, scale);
-            double coef = (double)(source.Width - 1) / image.Width;
+            double coef = (double)(source.Width) / image.Width;
 
             for (int y = 0; y < image.Height; ++y)
             {

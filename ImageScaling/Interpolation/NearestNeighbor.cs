@@ -3,9 +3,9 @@
     /// <summary>
     /// Метод ближайшего соседа
     /// </summary>
-    public class NearestNeighbor : IScaling
+    public class NearestNeighbor : InterpolationAlgorithm
     {
-        public ByteImage ScaleImage(ByteImage source, double scale)
+        protected override ByteImage ScaleImage(ByteImage source, double scale)
         {
             ByteImage image = new ByteImage(source, scale);
             double coef = 1 / scale;

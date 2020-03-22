@@ -1,20 +1,20 @@
-﻿using System;
+﻿using ImageScaling.Helpers;
 
-using ImageScaling.Helpers;
+using System;
 
 namespace ImageScaling.Interpolation
 {
     /// <summary>
     /// Масштабирование Ланцоша
     /// </summary>
-    public abstract class LanczosResampling : IScaling
+    public abstract class LanczosResampling : InterpolationAlgorithm
     {
         /// <summary>
         /// Порядок ядра
         /// </summary>
-        protected abstract int A { get; }
+        protected abstract int KernelOrder { get; }
 
-        public ByteImage ScaleImage(ByteImage source, double scale)
+        protected override ByteImage ScaleImage(ByteImage source, double scale)
         {
             ByteImage image = new ByteImage(source, scale);
             double coef = (double)(source.Width) / image.Width;
@@ -31,10 +31,10 @@ namespace ImageScaling.Interpolation
                     double[] channelData = new double[source.BytePerPixel];
                     double weight = 0;
 
-                    for (int fY = tempY - A + 1; fY <= tempY + A; ++fY)
+                    for (int fY = tempY - KernelOrder + 1; fY <= tempY + KernelOrder; ++fY)
                     {
                         if (fY < 0 || fY >= source.Height) continue;
-                        for (int fX = tempX - A + 1; fX <= tempX + A; ++fX)
+                        for (int fX = tempX - KernelOrder + 1; fX <= tempX + KernelOrder; ++fX)
                         {
                             if (fX < 0 || fX >= source.Width) continue;
 
@@ -63,8 +63,8 @@ namespace ImageScaling.Interpolation
         /// <returns></returns>
         private double LanczosKernel(double x)
         {
-            if (Math.Abs(x) < A)
-                return MathHelper.Sinc(x) * MathHelper.Sinc(x / (double)A);
+            if (Math.Abs(x) < KernelOrder)
+                return MathHelper.Sinc(x) * MathHelper.Sinc(x / (double)KernelOrder);
             return 0;
         }
     }
