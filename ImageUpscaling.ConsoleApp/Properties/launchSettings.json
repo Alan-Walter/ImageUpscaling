@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "ImageUpscaling.ConsoleApp": {
+      "commandName": "Project"
+    }
+  }
+}
