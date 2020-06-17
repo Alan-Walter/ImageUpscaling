@@ -1,10 +1,10 @@
 {
-  "TrainFilesPath": "D:\\DIV2K_train_HR\\DIV2K_train_HR\\",
-  "Epochs": 14500,
+  "TrainFilesPath": "TRAIN_PATH",
+  "Epochs": 30000,
   "BatchSize": 10,
-  "SaveDirectory": "D:\\YandexDisk\\Models",
+  "SaveDirectory": "SAVE_PATH",
   "IntermediateStep": 500,
-  "TempPath": "D:\\Models\\Train",
+  "TempPath": "TEMP_PATH",
   "CropImage": true,
   "RandomCropImage": false
 }
